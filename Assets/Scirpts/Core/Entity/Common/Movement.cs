@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Core.Movement
+namespace Core.Entity.Common
 {
     [RequireComponent(typeof(CapsuleCollider))]
     [RequireComponent(typeof(Rigidbody))]
@@ -42,6 +42,11 @@ namespace Core.Movement
             _rideHeight = _collider.center.y;
         }
 
+        private void OnValidate()
+        {
+            CalculateColliderData(_collider, _colliderData);
+        }
+
         public bool IsMoving()
         {
             var temp = _rb.velocity;
@@ -49,11 +54,6 @@ namespace Core.Movement
             return temp.magnitude > 0.01f;
         }
         
-        private void OnValidate()
-        {
-            CalculateColliderData(_collider, _colliderData);
-        }
-
         private void CalculateColliderData(CapsuleCollider defaultColliderData, FloatingCapsuleData data)
         {
             defaultColliderData.height = data.Height * (1 - _stepHeightPercentage);
@@ -71,11 +71,6 @@ namespace Core.Movement
             }
         }
         
-        private void ApplyGravity()
-        {
-            _rb.AddForce(Physics.gravity, ForceMode.Force);
-        }
-
         private void FixedUpdate()
         {
             FloatingCapsule();
@@ -101,7 +96,7 @@ namespace Core.Movement
             }
             else
             {
-                ApplyGravity();
+                _rb.AddForce(Physics.gravity, ForceMode.Force);
             }
         }
 
@@ -140,7 +135,6 @@ namespace Core.Movement
         {
             if (DrawRideHeight)
             {
-                _collider = GetComponent<CapsuleCollider>();
                 Gizmos.color = Color.red;
                 Gizmos.DrawLine(_collider.bounds.center + RideHeightOffset, transform.position + RideHeightOffset);
             }
