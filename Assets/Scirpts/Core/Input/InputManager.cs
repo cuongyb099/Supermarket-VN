@@ -11,7 +11,7 @@ namespace Core.Input
         //Action
         public InputAction LookAction { get; private set; }
         public InputAction MoveAction { get; private set; }
-        
+        public InputAction InteractAction { get; private set; }
         //Property
         public Vector3 MoveInput { get; private set; }
         
@@ -25,9 +25,11 @@ namespace Core.Input
         {
             _inputMap = new InputMap();
             _inputMap.Enable();
-            MoveAction = _inputMap.Default.Move;
-            LookAction = _inputMap.Default.Look;
-
+            var defaultAction = _inputMap.Default;
+            MoveAction = defaultAction.Move;
+            LookAction = defaultAction.Look;
+            InteractAction = defaultAction.Interact;
+            
             MoveAction.performed += HandleMovePerformed;
             MoveAction.canceled += HandleMoveCanceled;
         }

@@ -13,9 +13,9 @@ namespace Core.Entity.Common
         [SerializeField] private float _stepReachForce = 25f;
         [SerializeField] private LayerMask _groundMask;
         
-        private Rigidbody _rb;
+        public Rigidbody MovementRigidbody { get; private set; }
         private float _rideHeight;
-        private RaycastHit _hit;
+        private RaycastHit[] _hit = new RaycastHit[1];
         public bool IsGrounded { get; private set; }
         public bool ForceStop;
         
@@ -31,14 +31,14 @@ namespace Core.Entity.Common
 
         protected virtual void Awake()
         {
-            _rb = GetComponent<Rigidbody>();
+            MovementRigidbody = GetComponent<Rigidbody>();
             _collider = GetComponent<CapsuleCollider>();
         }
 
         private void Start()
         {
             CalculateColliderData(_collider, _colliderData);
-            _rb.useGravity = false;
+            MovementRigidbody.useGravity = false;
             _rideHeight = _collider.center.y;
         }
 
@@ -49,7 +49,7 @@ namespace Core.Entity.Common
 
         public bool IsMoving()
         {
-            var temp = _rb.velocity;
+            var temp = MovementRigidbody.velocity;
             temp.y = 0f;
             return temp.magnitude > 0.01f;
         }
@@ -71,47 +71,46 @@ namespace Core.Entity.Common
             }
         }
         
-        private void FixedUpdate()
-        {
-            FloatingCapsule();
-        }
-
         public void FloatingCapsule()
         {
-            IsGrounded = Physics.Raycast(_collider.bounds.center, Vector3.down, out _hit, 
+             int hitAmount = Physics.RaycastNonAlloc(_collider.bounds.center, Vector3.down, _hit, 
                 _rideHeight + 0.4f, _groundMask);
             
+            IsGrounded = hitAmount > 0;
+             
             if (IsGrounded)
             {
-                var distanceToFloatingPoint = _rideHeight * transform.localScale.y - _hit.distance;
+                var distanceToFloatingPoint = _rideHeight * transform.localScale.y - _hit[0].distance;
 
                 if (distanceToFloatingPoint == 0f)
                 {
                     return;
                 }
 
-                var amountToLift = distanceToFloatingPoint * _stepReachForce - _rb.velocity.y;
+                var amountToLift = distanceToFloatingPoint * _stepReachForce - MovementRigidbody.velocity.y;
                 
-                _rb.AddForce(Vector3.up * amountToLift, ForceMode.VelocityChange);
+                MovementRigidbody.AddForce(Vector3.up * amountToLift, ForceMode.VelocityChange);
             }
             else
             {
-                _rb.AddForce(Physics.gravity, ForceMode.Force);
+                MovementRigidbody.AddForce(Physics.gravity, ForceMode.Force);
             }
         }
 
         public void Stop()
         {
-            _rb.velocity = Vector3.zero;
+            MovementRigidbody.velocity = Vector3.zero;
         }
 
         public void Move(Vector3 moveDirection)
         {
-            var currentVelocity = _rb.velocity;
+            var currentVelocity = MovementRigidbody.velocity;
             moveDirection = moveDirection.normalized;
             
             moveDirection.y = 0f;
-            currentVelocity.y = 0f;
+            //currentVelocity.y = 0f;
+            currentVelocity.z = 0f;
+            currentVelocity.x = 0f;
             
             if(moveDirection.magnitude > 0.01f)
             {
@@ -121,8 +120,9 @@ namespace Core.Entity.Common
             {
                 _acclerationMultipler = Mathf.Lerp(_acclerationMultipler, 0f, Acceleration * Time.fixedDeltaTime);
             }
-          
-            _rb.AddForce(moveDirection * Speed * _acclerationMultipler - currentVelocity, ForceMode.VelocityChange);
+         
+            MovementRigidbody.velocity = currentVelocity + moveDirection * Speed * _acclerationMultipler;
+            //_rb.AddForce(moveDirection * Speed * _acclerationMultipler - currentVelocity, ForceMode.VelocityChange);
         }
 
         #if UNITY_EDITOR
@@ -143,7 +143,7 @@ namespace Core.Entity.Common
             {
                 Gizmos.color = Color.red;
                 Gizmos.DrawLine(_collider.bounds.center, _collider.bounds.center + Vector3.down * (_rideHeight + 0.4f));
-                Gizmos.DrawSphere(_hit.point, 0.2f);
+                Gizmos.DrawSphere(_hit[0].point, 0.2f);
             }
             
         }

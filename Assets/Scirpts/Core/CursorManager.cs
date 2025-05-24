@@ -13,18 +13,18 @@ namespace Core
         
         private void OnEnable()
         {
-            DisableCursor();
+            LockCursor();
         }
 
-        public void DisableCursor()
+        public void LockCursor()
         {
-            Cursor.visible = false;   
+            Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
             
-        public void EnableCursor()
+        public void UnlockCursor()
         {
-            Cursor.visible = true;   
+            Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
         }
     }

@@ -16,7 +16,12 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: bf9c32b86e7b1c446bc28a3e0e9da70c
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: fe5e2286fc2769641b85ee16d7c85401
+    m_Address: Standard URP Outline
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 39681c232b168d242b240049b9254bf6, type: 2}
   m_SchemaSet:
