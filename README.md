@@ -4,9 +4,10 @@
 
 ```
 └── Assets
-    ├── Data                  # Chứa các file dữ liệu game như JSON, ScriptableObject,...
+    ├── Data                    # Chứa các file dữ liệu game như JSON, ScriptableObject,...
     ├── Scripts                 # Thư mục chứa toàn bộ file script C#
     ├── Sprites                 # Chứa tất cả sprite dùng trong game
+    ├── Fonts                   # Chứa Font chữ dùng trong game
     ├── Animations              # Animation Controller và các file animation clip
     ├── Audio                   # Nhạc nền, âm thanh hiệu ứng
     ├── Materials               # Vật liệu cho 3D hoặc shader nếu có sử dụng
