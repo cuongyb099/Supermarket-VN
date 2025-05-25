@@ -1,14 +1,14 @@
-using Core.Entity.Common;
 using Core.Interact;
 using UnityEngine;
-
+//Testing Feature
 public class Box : InteractObject
 {
     protected Collider objectCollider;
     protected Rigidbody rb;
     
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         objectCollider = GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
     }
@@ -16,7 +16,7 @@ public class Box : InteractObject
     protected override void OnInteract(Transform source)
     {
         if(!source.TryGetComponent(out Interactor interactor)) return;
-        HideOutline();
+        ObjectOutline.DisableOutline();
         objectCollider.isTrigger = true;
         rb.isKinematic = true;
         interactor.AttachItemToHand(this);

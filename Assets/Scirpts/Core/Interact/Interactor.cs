@@ -1,5 +1,6 @@
 using System.Collections;
 using Core.Input;
+using Core.Manager;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -51,6 +52,7 @@ namespace Core.Interact
             currentInteractTarget.transform.SetParent(null);
             var rb = currentInteractTarget.GetComponent<Rigidbody>();
             rb.AddForce(cameraTransform.forward * 10, ForceMode.Impulse);
+            rb.AddTorque(Vector3.one * 5, ForceMode.Impulse);
             Enable = true;
         }
 
@@ -74,25 +76,25 @@ namespace Core.Interact
                 int hitCount = Physics.RaycastNonAlloc(cameraTransform.position, 
                     cameraTransform.forward, hits, RayDistance, layerMask);
 
-                if (hitCount == 0)
-                {
-                    currentInteractTarget?.HideOutline();
-                    currentInteractTarget = null;
-                    yield return wait;
-                    continue;   
-                }
-
+                bool isInteract = false;
+                
                 for (int i = 0; i < hitCount; i++)
                 {
                     var hit = hits[i];
                     
                     if(!hit.transform.TryGetComponent(out InteractObject interactable) 
-                       || currentInteractTarget == interactable 
                        || !interactable.CanInteract) continue;
-                    
+
+                    isInteract = true;
                     currentInteractTarget = interactable;
-                    interactable.ShowOutline();
+                    interactable.ObjectOutline?.EnableOutline();
                     break;
+                }
+                
+                if (!isInteract)
+                {
+                    currentInteractTarget?.ObjectOutline?.DisableOutline();
+                    currentInteractTarget = null;
                 }
                 
                 yield return wait;

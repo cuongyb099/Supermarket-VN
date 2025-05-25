@@ -1,5 +1,6 @@
 using Core.Entity.Common;
 using Core.Input;
+using Core.Manager;
 using UnityEngine;
 
 namespace Core.Entity
