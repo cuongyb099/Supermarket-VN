@@ -55,7 +55,8 @@ Shader "Custom/Outline Fill" {
 
       uniform fixed4 _OutlineColor;
       uniform float _OutlineWidth;
-
+      float4 _PivotCenter;
+      
       v2f vert(appdata input) {
         v2f output;
 

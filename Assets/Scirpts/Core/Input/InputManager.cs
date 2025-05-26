@@ -11,7 +11,9 @@ namespace Core.Input
         //Action
         public InputAction LookAction { get; private set; }
         public InputAction MoveAction { get; private set; }
+        public InputAction RunAction { get; private set;  }
         public InputAction InteractAction { get; private set; }
+        
         //Property
         public Vector3 MoveInput { get; private set; }
         
@@ -29,6 +31,7 @@ namespace Core.Input
             MoveAction = defaultAction.Move;
             LookAction = defaultAction.Look;
             InteractAction = defaultAction.Interact;
+            RunAction = defaultAction.Run;
             
             MoveAction.performed += HandleMovePerformed;
             MoveAction.canceled += HandleMoveCanceled;

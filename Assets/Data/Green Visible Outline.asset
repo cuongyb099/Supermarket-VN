@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e50ad8c753294ce3b670aacc927e2dfb, type: 3}
-  m_Name: Default Outline
+  m_Name: Green Visible Outline
   m_EditorClassIdentifier: 
   <OutlineWidth>k__BackingField: 5
   <OutlineColor>k__BackingField: {r: 0, g: 1, b: 0, a: 1}
-  <OutlineMode>k__BackingField: 1
+  <OutlineMode>k__BackingField: 0

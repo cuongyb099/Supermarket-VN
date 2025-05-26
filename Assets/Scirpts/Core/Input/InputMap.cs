@@ -53,6 +53,15 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Run"",
+                    ""type"": ""Button"",
+                    ""id"": ""c5aa6912-cf75-439c-8cae-45e7f949579f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -132,6 +141,17 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5e7264fc-abe5-4969-979a-07f95bbbb8a2"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -143,6 +163,7 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
         m_Default_Look = m_Default.FindAction("Look", throwIfNotFound: true);
         m_Default_Move = m_Default.FindAction("Move", throwIfNotFound: true);
         m_Default_Interact = m_Default.FindAction("Interact", throwIfNotFound: true);
+        m_Default_Run = m_Default.FindAction("Run", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -207,6 +228,7 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
     private readonly InputAction m_Default_Look;
     private readonly InputAction m_Default_Move;
     private readonly InputAction m_Default_Interact;
+    private readonly InputAction m_Default_Run;
     public struct DefaultActions
     {
         private @InputMap m_Wrapper;
@@ -214,6 +236,7 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Default_Look;
         public InputAction @Move => m_Wrapper.m_Default_Move;
         public InputAction @Interact => m_Wrapper.m_Default_Interact;
+        public InputAction @Run => m_Wrapper.m_Default_Run;
         public InputActionMap Get() { return m_Wrapper.m_Default; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -232,6 +255,9 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @Run.started += instance.OnRun;
+            @Run.performed += instance.OnRun;
+            @Run.canceled += instance.OnRun;
         }
 
         private void UnregisterCallbacks(IDefaultActions instance)
@@ -245,6 +271,9 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @Run.started -= instance.OnRun;
+            @Run.performed -= instance.OnRun;
+            @Run.canceled -= instance.OnRun;
         }
 
         public void RemoveCallbacks(IDefaultActions instance)
@@ -267,5 +296,6 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnRun(InputAction.CallbackContext context);
     }
 }

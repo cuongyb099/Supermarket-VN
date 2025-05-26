@@ -1,6 +1,5 @@
 using System.Collections;
 using Core.Input;
-using Core.Manager;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,6 +14,7 @@ namespace Core.Interact
         [SerializeField] protected LayerMask layerMask;
         [SerializeField] protected Transform handTransform;
         [SerializeField] protected float itemReturnHandTime = 0.2f;
+        [SerializeField] protected OutlineConfigSO outlineConfig; 
         
         protected RaycastHit[] hits = new RaycastHit[10];
         protected Transform cameraTransform => CameraManager.Instance.MainCamera.transform;
@@ -86,7 +86,9 @@ namespace Core.Interact
                        || !interactable.CanInteract) continue;
 
                     isInteract = true;
+                    currentInteractTarget?.ObjectOutline?.DisableOutline();
                     currentInteractTarget = interactable;
+                    interactable.ObjectOutline?.SetConfig(outlineConfig);
                     interactable.ObjectOutline?.EnableOutline();
                     break;
                 }

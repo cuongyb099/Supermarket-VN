@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Core.Interact
 {
     [DisallowMultipleComponent]
-    public class Outline : MonoBehaviour 
+    public class OutlineFillMask : OutlineBase 
     {
         public enum OutlineMode 
         {
@@ -16,13 +16,13 @@ namespace Core.Interact
             SilhouetteOnly
         }
 
-        [Header("Need Bake Mesh Before Enter")]
-        public OutlineConfigSO OutlineConfig;
+        [Header("Uncheck Static Batching To Outline Object")]
+        [SerializeField, Tooltip("Don't Need Drag Ref So In Here")] 
+        protected OutlineConfigSO config; 
 
         private Renderer[] renderers;
         private static Material outlineMaskMaterial;
         private static Material outlineFillMaterial;
-        public bool IsEnable { get; private set; }
         
         private static bool _isLoadDone;
         
@@ -38,12 +38,14 @@ namespace Core.Interact
             outlineFillMaterial = null;
         }
         
-        private void Awake() {
-
+        private void Awake() 
+        {
             renderers = GetComponentsInChildren<Renderer>();
+            
 #if UNITY_EDITOR
             GenerateSmoothNormalUV.Bake(GetComponentsInChildren<MeshFilter>().ToList());
 #endif
+            
               if(_isLoadDone) return;
             _ = LoadMaterials();
         }
@@ -67,7 +69,7 @@ namespace Core.Interact
         }
 
         [ContextMenu("Enable Outline")]
-        public void EnableOutline()
+        public override void EnableOutline()
         {
             if(IsEnable) return;
             
@@ -92,7 +94,7 @@ namespace Core.Interact
         }
 
         [ContextMenu("Disable Outline")]
-        public void DisableOutline()
+        public override void DisableOutline()
         {
             if(!IsEnable) return;
             
@@ -113,34 +115,39 @@ namespace Core.Interact
             UpdateMaterialProperties();
         }
 
+        public override void SetConfig(OutlineConfigSO config)
+        {
+            this.config = config;
+        }
+
         private void UpdateMaterialProperties() 
         {
-              outlineFillMaterial.SetColor(OutlineColor, OutlineConfig.OutlineColor);
+              outlineFillMaterial.SetColor(OutlineColor, config.OutlineColor);
 
-              switch (OutlineConfig.OutlineMode) 
+              switch (config.OutlineMode) 
               {
                 case OutlineMode.OutlineAll:
                   outlineMaskMaterial.SetFloat(ZTest, (float)UnityEngine.Rendering.CompareFunction.Always);
                   outlineFillMaterial.SetFloat(ZTest, (float)UnityEngine.Rendering.CompareFunction.Always);
-                  outlineFillMaterial.SetFloat(OutlineWidth, OutlineConfig.OutlineWidth);
+                  outlineFillMaterial.SetFloat(OutlineWidth, config.OutlineWidth);
                   break;
 
                 case OutlineMode.OutlineVisible:
                   outlineMaskMaterial.SetFloat(ZTest, (float)UnityEngine.Rendering.CompareFunction.Always);
                   outlineFillMaterial.SetFloat(ZTest, (float)UnityEngine.Rendering.CompareFunction.LessEqual);
-                  outlineFillMaterial.SetFloat(OutlineWidth, OutlineConfig.OutlineWidth);
+                  outlineFillMaterial.SetFloat(OutlineWidth, config.OutlineWidth);
                   break;
 
                 case OutlineMode.OutlineHidden:
                   outlineMaskMaterial.SetFloat(ZTest, (float)UnityEngine.Rendering.CompareFunction.Always);
                   outlineFillMaterial.SetFloat(ZTest, (float)UnityEngine.Rendering.CompareFunction.Greater);
-                  outlineFillMaterial.SetFloat(OutlineWidth, OutlineConfig.OutlineWidth);
+                  outlineFillMaterial.SetFloat(OutlineWidth, config.OutlineWidth);
                   break;
 
                 case OutlineMode.OutlineAndSilhouette:
                   outlineMaskMaterial.SetFloat(ZTest, (float)UnityEngine.Rendering.CompareFunction.LessEqual);
                   outlineFillMaterial.SetFloat(ZTest, (float)UnityEngine.Rendering.CompareFunction.Always);
-                  outlineFillMaterial.SetFloat(OutlineWidth, OutlineConfig.OutlineWidth);
+                  outlineFillMaterial.SetFloat(OutlineWidth, config.OutlineWidth);
                   break;
 
                 case OutlineMode.SilhouetteOnly:

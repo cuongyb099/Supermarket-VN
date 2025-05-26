@@ -1,7 +1,9 @@
+using System;
 using Core.Entity.Common;
 using Core.Input;
-using Core.Manager;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Core.Entity
 {
@@ -11,11 +13,28 @@ namespace Core.Entity
         public Movement MovementCtrl { get; private set; }
         [SerializeField] protected Transform pivotLook;
         
+        [Header("Speed")]
+        [SerializeField] protected float walkSpeed = 2f;
+        [SerializeField] protected float runSpeed = 5f;
+        [SerializeField] protected float timeToReachSpeed = 0.25f;
+        protected Tween speedTween;
+        
         private void Awake()
         {
             MovementCtrl = GetComponent<Movement>();
+            MovementCtrl.Speed = walkSpeed;
+            InputManager.Instance.RunAction.performed += HandleRunPerfomed;
+            InputManager.Instance.RunAction.canceled += HandleRunCanceled;
         }
-        
+
+        private void OnDestroy()
+        {
+            if(!InputManager.IsExist) return;
+            
+            InputManager.Instance.RunAction.performed -= HandleRunPerfomed;
+            InputManager.Instance.RunAction.canceled -= HandleRunCanceled;
+        }
+
         private void FixedUpdate()
         {
             UpdateMovement();
@@ -27,14 +46,34 @@ namespace Core.Entity
             UpdateRotation();
         }
 
+        private void HandleRunCanceled(InputAction.CallbackContext context)
+        {
+            UpdateCharacterSpeed(walkSpeed);
+        }
+
+
+        private void HandleRunPerfomed(InputAction.CallbackContext context)
+        {
+           UpdateCharacterSpeed(runSpeed);
+        }
+        
+        private void UpdateCharacterSpeed(float characterSpeed)
+        {
+            if(speedTween != null && speedTween.IsActive()) speedTween.Kill();
+            
+            speedTween = DOVirtual.Float(MovementCtrl.Speed, characterSpeed, timeToReachSpeed, (speed) =>
+            {
+                MovementCtrl.Speed = speed;
+            })
+            .SetEase(Ease.Linear);
+        }
+        
         private void UpdateRotation()
         {
             const float smoothSpeed = 30f;
             Transform camTransform = CameraManager.Instance.MainCamera.transform;
-            Vector3 camForward = camTransform.forward;
+            Vector3 camForward = Vector3.ProjectOnPlane(camTransform.forward, Vector3.up);
             Rigidbody rb = MovementCtrl.MovementRigidbody;
-            camForward.y = 0;
-            camForward.Normalize();
             
             if (camForward != Vector3.zero)
             {

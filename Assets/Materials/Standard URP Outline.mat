@@ -18,7 +18,7 @@ Material:
   - EMISSIVE_MAP
   - FOG
   - MATCAP_PERSPECTIVE
-  - OUTLINE
+  - OUTLINE_PASS_DISABLED
   - SHADOWS_ENABLED
   - _DETAILBLEND_MULTIPLY
   - _DETAILUV_UV1
@@ -45,7 +45,8 @@ Material:
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - SRPDEFAULTUNLIT
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -223,11 +224,11 @@ Material:
     - _OptLightmapping: 0
     - _OptPointLights: 0
     - _OptShadow: 0
-    - _Outline: 1
-    - _OutlineComp: 6
+    - _Outline: 0
+    - _OutlineComp: 8
     - _OutlineGroup: 1
-    - _OutlinePass: 2
-    - _OutlineWidth: 0.016
+    - _OutlinePass: 0
+    - _OutlineWidth: 0.34
     - _Parallax: 0.02
     - _Plant: 0
     - _PlantBaseHeight: 0

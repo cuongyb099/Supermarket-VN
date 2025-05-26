@@ -2,16 +2,15 @@ using UnityEngine;
 
 namespace Core.Interact
 {
-	[RequireComponent(typeof(Outline))]
     public abstract class InteractObject : MonoBehaviour
     {
-        public Outline ObjectOutline { get; protected set; }
+        public OutlineBase ObjectOutline { get; protected set; }
         [field: SerializeField] public bool CanInteract { get; protected set; }
         private static bool _isLoadone;
 
         protected virtual void Awake()
         {
-	        ObjectOutline = GetComponent<Outline>();
+	        ObjectOutline = GetComponent<OutlineFillMask>();
         }
 
         public void Interact(Transform source)
