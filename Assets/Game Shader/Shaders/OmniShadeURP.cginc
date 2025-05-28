@@ -16,7 +16,6 @@ struct appdata_full {
 	float4 texcoord1 : TEXCOORD1;
 	float4 texcoord2 : TEXCOORD2;
 	float4 texcoord3 : TEXCOORD3;
-	float4 texcoord7 : TEXCOORD7;
 	half4 color : COLOR;
 	UNITY_VERTEX_INPUT_INSTANCE_ID
 };
