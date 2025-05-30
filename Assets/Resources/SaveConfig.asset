@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: SaveConfig
   m_EditorClassIdentifier: 
   FileName: Save
-  EncryptionKey: 
+  EncryptionKey: Tesg
   EncryptionType: 0
   SerializeType: 0

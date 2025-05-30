@@ -1,0 +1,17 @@
+{
+    "name": "KatInventoryAsem",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d5d6bdb334dc01f4681e9a9079a491a2",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
