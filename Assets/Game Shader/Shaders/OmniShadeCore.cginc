@@ -526,11 +526,11 @@ v2f vert (appdata_full v) {
 	UNITY_SETUP_INSTANCE_ID(v);
 	UNITY_TRANSFER_INSTANCE_ID(v, o);
 	UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-	
+
 	// Vertex manipulations
 	#if OUTLINE_PASS
 		#if OUTLINE
-			v.vertex.xyz += _OutlineWidth * normalize(v.texcoord7);
+			v.vertex.xyz += _OutlineWidth * normalize(v.normal);
 		#else
 			o.pos = 0;
 			return o;
