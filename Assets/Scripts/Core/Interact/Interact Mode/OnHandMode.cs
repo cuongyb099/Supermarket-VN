@@ -1,7 +1,6 @@
-using Core.Collision;
+using Core.Event;
 using Core.Input;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,29 +15,45 @@ namespace Core.Interact.Interact_Mode
     [System.Serializable]
     public class OnHandMode : InteractModeBase
     {
+        [SerializeField] protected  float returnHandDuration = 0.2f;
         [SerializeField] protected Transform leftHandPos;
         [SerializeField] protected Transform middleHandPos;
-        [SerializeField] protected float itemReturnHandTime = 0.2f;
+        [SerializeField] protected float throwForce = 10f;
+        [SerializeField] protected float minThrowAngle = 30f;
+        protected InputAction intoPlaceModeAction;
+        protected InputAction throwAction;
         
-        public override YieldInstruction OnUpdate() => null;
+        //Message
+        public const string CurrentAngleLessMinAngle = "Cannot Throw With Current Angle"; 
+        
+        public override YieldInstruction OnUpdate()
+        {
+            if (intoPlaceModeAction.WasPressedThisFrame())
+            {
+                SwitchToPlaceMode();
+                return null;
+            }
+
+            if (!throwAction.WasPressedThisFrame()) return null;
+            float currentAngle = Vector3.Angle(data.CamTransform.forward, Vector3.down);
+
+            if (currentAngle < minThrowAngle)
+            {
+                InteractEvent.OnThrowIgnore?.Invoke(CurrentAngleLessMinAngle);
+                return null;
+            }
+            ThrowObject();
+            
+            return null;
+        }
 
         public override void Init(Interactor interactor, InteractData interactData)
         {
             base.Init(interactor, interactData);
             var defaultActions = InputManager.Instance.PlayerInputMap.Default;
             
-            InputAction IntoPlaceModeAction = defaultActions.IntoPlaceMode;
-            IntoPlaceModeAction.performed += SwitchToPlaceMode;
-        }
-
-        public override void Dispose()
-        {
-            if(!InputManager.IsExist) return;
-            
-            var defaultActions = InputManager.Instance.PlayerInputMap.Default;
-            InputAction IntoPlaceModeAction = defaultActions.IntoPlaceMode;
-            
-            IntoPlaceModeAction.performed -= SwitchToPlaceMode;
+            intoPlaceModeAction = defaultActions.IntoPlaceMode;
+            throwAction = defaultActions.Throw;
         }
 
         public void AttachItemToHand(ObjectAttackToHand item)
@@ -49,9 +64,21 @@ namespace Core.Interact.Interact_Mode
             data.CurrentInteractMode = InteractMode.OnHand;
             item.SetActiveCollision(false);
             Transform interactTransform = item.transform;
-            interactTransform.SetParent(GetHandTransform(item.HandPosition));
-            interactTransform.DOLocalMove(Vector3.zero, itemReturnHandTime);
-            interactTransform.DOLocalRotate(Vector3.zero, itemReturnHandTime);
+            var curHand = GetHandTransform(item.HandPosition);
+            this.data.CurrentHandTransform = curHand;
+            interactTransform.SetParent(curHand);
+            interactTransform.DOLocalMove(Vector3.zero, returnHandDuration);
+            interactTransform.DOLocalRotate(Vector3.zero, returnHandDuration);
+        }
+        
+        private void SwitchToPlaceMode()
+        {
+            if(this.data.CurrentInteractMode != InteractMode.OnHand) return;
+            
+            this.data.CurrentInteractMode = InteractMode.Place;
+            var CurrentTarget = this.data.CurrentTarget;
+            Transform targetTransform = CurrentTarget.transform;
+            data.CurrentPlaceObject = targetTransform.GetComponent<IPlacable>();
         }
         
         public Transform GetHandTransform(HandPositionType handPositionType)
@@ -67,15 +94,15 @@ namespace Core.Interact.Interact_Mode
             return null;
         }
         
-        private void SwitchToPlaceMode(InputAction.CallbackContext context)
+        public void ThrowObject()
         {
-            if(this.data.CurrentInteractMode != InteractMode.OnHand) return;
-            
-            this.data.CurrentInteractMode = InteractMode.Place;
-            var CurrentTarget = this.data.CurrentTarget;
-            Transform targetTransform = CurrentTarget.transform;
-            data.CurrentPlaceObject = targetTransform.GetComponent<IPlacable>();
-            targetTransform.SetParent(null);
+            var target = data.CurrentTarget;
+            target.transform.SetParent(null);
+            target.ResetToIdle();
+            var rb = target.GetComponent<Rigidbody>();
+            rb.AddForce(data.CamTransform.forward * throwForce, ForceMode.VelocityChange);
+            data.ResetCurrentTarget();
+            data.CurrentInteractMode = InteractMode.Default;
         }
     }
 }

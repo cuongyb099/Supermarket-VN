@@ -14,6 +14,7 @@ namespace Core.Interact
 
         public override void ResetToIdle()
         {
+            base.ResetToIdle();
             CanInteract = true;
         }
     }

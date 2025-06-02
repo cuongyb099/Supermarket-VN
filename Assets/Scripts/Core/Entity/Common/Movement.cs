@@ -94,7 +94,7 @@ namespace Core.Entity.Common
             }
             else
             {
-                MovementRigidbody.AddForce(Physics.gravity, ForceMode.Force);
+                MovementRigidbody.AddForce(Physics.gravity, ForceMode.Acceleration);
             }
         }
 
@@ -109,7 +109,6 @@ namespace Core.Entity.Common
             moveDirection = moveDirection.normalized;
             
             moveDirection.y = 0f;
-            //currentVelocity.y = 0f;
             currentVelocity.z = 0f;
             currentVelocity.x = 0f;
             
@@ -123,7 +122,6 @@ namespace Core.Entity.Common
             }
          
             MovementRigidbody.velocity = currentVelocity + moveDirection * Speed * _acclerationMultipler;
-            //_rb.AddForce(moveDirection * Speed * _acclerationMultipler - currentVelocity, ForceMode.VelocityChange);
         }
 
         #if UNITY_EDITOR

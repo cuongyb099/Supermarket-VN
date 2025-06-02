@@ -31,7 +31,7 @@ namespace Core.Interact
 
         public virtual void ResetToIdle()
         {
-	        
+	        SetActiveCollision(true);
         }
         
         public virtual void SetActiveCollision(bool value)

@@ -18,6 +18,7 @@ namespace Core.Interact
             base.Awake();
             fur_collider = GetComponent<Collider>();
             rb = GetComponent<Rigidbody>();
+            rb.interpolation = RigidbodyInterpolation.Interpolate;
         }
 
         protected override void OnInteract(Transform source)
@@ -25,12 +26,19 @@ namespace Core.Interact
             CanInteract = false;
             base.OnInteract(source);
             this.ObjectOutline.DisableOutline();
+            rb.interpolation = RigidbodyInterpolation.None;
         }
 
         public override void SetActiveCollision(bool value)
         {
             fur_collider.enabled = value;
             rb.isKinematic = !value;
+        }
+
+        public override void ResetToIdle()
+        {
+            base.ResetToIdle();
+            rb.interpolation = RigidbodyInterpolation.Interpolate;
         }
 
         public PlaceHitbox GetPlaceHitBox() => placeHitBox;

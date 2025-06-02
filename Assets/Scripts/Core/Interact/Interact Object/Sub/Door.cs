@@ -30,13 +30,13 @@ namespace Core.Interact
         {
             this.CanInteract = false;
             this.ObjectOutline.DisableOutline();
-            SetActiveDoorCollider(false);
+            SetActiveCollision(false);
             OpenDoor();
 
             DOVirtual.DelayedCall(openTime + 0.01f, () =>
             {
                 CanInteract = true;
-                SetActiveDoorCollider(true);
+                SetActiveCollision(true);
             });
         }
 
@@ -55,7 +55,7 @@ namespace Core.Interact
             IsOpened = false;
         }
 
-        protected virtual void SetActiveDoorCollider(bool active)
+        public override void SetActiveCollision(bool active)
         {
             leftDoorCollider.enabled = active;
             rightDoorCollider.enabled = active;

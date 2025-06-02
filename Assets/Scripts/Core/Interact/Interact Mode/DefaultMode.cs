@@ -7,12 +7,13 @@ namespace Core.Interact.Interact_Mode
     {
         [SerializeField] protected LayerMask layer;
         [SerializeField] protected OutlineConfigSO outlineConfig;
+        [SerializeField] protected int checkPerSecond = 10;
         protected WaitForSeconds wait;
         
         public override void Init(Interactor interactor, InteractData interactData)
         {
             base.Init(interactor, interactData);
-            wait = new WaitForSeconds(1f / this.data.CheckPerSecond);
+            wait = new WaitForSeconds(1f / checkPerSecond);
         }
 
         public override YieldInstruction OnUpdate()
@@ -37,7 +38,7 @@ namespace Core.Interact.Interact_Mode
                 if(!hit.transform.TryGetComponent(out InteractObject interactable) 
                    || !interactable.CanInteract) continue;
                 
-                currentTarget?.ObjectOutline.DisableOutline();
+                currentTarget?.ObjectOutline?.DisableOutline();
                 data.CurrentTarget = interactable;
                 interactable.ObjectOutline?.SetConfig(outlineConfig);
                 interactable.ObjectOutline?.EnableOutline();
@@ -45,17 +46,19 @@ namespace Core.Interact.Interact_Mode
             }
 
             currentTarget?.ObjectOutline?.DisableOutline();
-            data.CurrentTarget = null;
+            data.ResetCurrentTarget();
 
             return wait;
         }
 
+#if UNITY_EDITOR
         public override void OnDrawGizmos()
         {
             Gizmos.color = Color.green;
             Transform cameraTransform = this.data.CamTransform;
             Gizmos.DrawLine(cameraTransform.position, cameraTransform.position + cameraTransform.forward * data.RayDistance);
         }
+#endif
     }
 }
 

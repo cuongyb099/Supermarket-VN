@@ -1,4 +1,3 @@
-using System;
 using Core.Entity.Common;
 using Core.Input;
 using DG.Tweening;
