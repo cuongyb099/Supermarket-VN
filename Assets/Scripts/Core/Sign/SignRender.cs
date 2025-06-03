@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
@@ -15,12 +16,21 @@ namespace Core.Sign
         private Material _material;
         private Texture2D _signOpenTexture;
         private Texture2D _signClosedTexture;
+        private bool _loadTexture2DDone;
         
         protected void Awake()
         {
+            _loadTexture2DDone = false;
             _ = LoadTexture2D();
             _material = GetComponent<MeshRenderer>().sharedMaterial;
             // _material.mainTexture = _signOpenTexture;
+            StartCoroutine(SetDefaultTexture());
+        }
+
+        IEnumerator SetDefaultTexture()
+        {
+            yield return new WaitUntil(() => _loadTexture2DDone);
+            _material.mainTexture = _signOpenTexture;
         }
 
         private async UniTaskVoid LoadTexture2D()
@@ -35,6 +45,8 @@ namespace Core.Sign
 
             _signOpenTexture = textures.Item1;
             _signClosedTexture = textures.Item2;
+            
+            _loadTexture2DDone = true;
             
             AddressablesManager.Instance.Release(SignOpenStore);
             AddressablesManager.Instance.Release(SignClosedStore);
