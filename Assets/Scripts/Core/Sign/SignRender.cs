@@ -1,4 +1,5 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
@@ -11,29 +12,61 @@ namespace Core.Sign
         [SerializeField] public Vector3 MaxScale;
         
         private Sequence _sequenceTween;
+        private Material _material;
+        private Texture2D _signOpenTexture;
+        private Texture2D _signClosedTexture;
         
         protected void Awake()
         {
-            
+            _ = LoadTexture2D();
+            _material = GetComponent<MeshRenderer>().sharedMaterial;
+            // _material.mainTexture = _signOpenTexture;
         }
 
-        void StartAnimation()
+        private async UniTaskVoid LoadTexture2D()
+        {
+            const string SignOpenStore = "sign_open_store";
+            const string SignClosedStore = "sign_closed_store";
+
+            var texture1 = AddressablesManager.Instance.LoadAssetAsync<Texture2D>(SignOpenStore);
+            var texture2 = AddressablesManager.Instance.LoadAssetAsync<Texture2D>(SignClosedStore);
+            
+            var textures = await UniTask.WhenAll(texture1, texture2);
+
+            _signOpenTexture = textures.Item1;
+            _signClosedTexture = textures.Item2;
+            
+            AddressablesManager.Instance.Release(SignOpenStore);
+            AddressablesManager.Instance.Release(SignClosedStore);
+        }
+
+        void StartAnimation(bool openStatus)
         {
             _sequenceTween = DOTween.Sequence();
             _sequenceTween.Append(transform.DOScale(MinScale, SignAnimationSecond))
+                          .AppendCallback(() =>
+                          {
+                              if (!_material)
+                              {
+                                  return;
+                              }
+                              _material.mainTexture = openStatus ? _signOpenTexture : _signClosedTexture;
+                              // _material.mainTexture = _signClosedTexture;
+                              // Debug.Log("Callback " + _material.mainTexture.name);
+                          })
                           .Append(transform.DOScale(MaxScale, SignAnimationSecond));
         }
         
         public void ShowOpen()
         {
-            StartAnimation();
-            Debug.Log("Show Open");
+            StartAnimation(openStatus : true);
+            // Debug.Log("Show Open");
         }
 
         public void ShowClose()
         {
-            StartAnimation();
-            Debug.Log("Show Close");
+            StartAnimation(openStatus : false);
+            // Debug.Log("Show Close");
         }
     }
 }

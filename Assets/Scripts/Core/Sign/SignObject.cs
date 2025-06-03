@@ -9,8 +9,9 @@ namespace Core.Sign
         protected override void Awake()
         {
             base.Awake();
-            this.CanInteract = true;
-            this._signSystem = GetComponent<SignSystem>();
+            CanInteract = true;
+            // ObjectOutline.
+            _signSystem = GetComponent<SignSystem>();
         }
 
         protected override void OnInteract(Transform source)
@@ -18,8 +19,8 @@ namespace Core.Sign
             // this.CanInteract = false;
             // this.ObjectOutline.DisableOutline();
             Debug.Log("SignObject OnInteract");
-            if (!this._signSystem) return;
-            this._signSystem.StatusChange();
+            if (!_signSystem) return;
+            _signSystem.StatusChange();
         }
     }
 }

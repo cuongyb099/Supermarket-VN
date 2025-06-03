@@ -17,14 +17,14 @@ namespace Core.Sign
 
         public Action ContinueSpawnCallback
         {
-            get => this._continueSpawnCallback;
-            set => this._continueSpawnCallback = value;
+            get => _continueSpawnCallback;
+            set => _continueSpawnCallback = value;
         }
 
         public Action PauseSpawnCallback
         {
-            get => this._pauseSpawnCallback;
-            set => this._pauseSpawnCallback = value;
+            get => _pauseSpawnCallback;
+            set => _pauseSpawnCallback = value;
         }
 
         private SignRender _signRender;
@@ -32,70 +32,70 @@ namespace Core.Sign
         private void Awake()
         {
             // Test
-            this._continueSpawnCallback += CallbackOpen;
-            this._pauseSpawnCallback += CallbackClose;
+            _continueSpawnCallback += CallbackOpen;
+            _pauseSpawnCallback += CallbackClose;
             
-            this.StatusReverse = false;
-            this.statusOpened = true;
+            StatusReverse = false;
+            statusOpened = true;
             
-            this._signRender = GetComponent<SignRender>();
+            _signRender = GetComponent<SignRender>();
         }
 
         void OnClose()
         {
-            this._pauseSpawnCallback?.Invoke();
-            if (!this._signRender)
+            _pauseSpawnCallback?.Invoke();
+            if (!_signRender)
             {
                 return;
             }
-            this._signRender.ShowClose();
+            _signRender.ShowClose();
         }
 
         void OnOpen()
         {
-            this._continueSpawnCallback?.Invoke();
-            if (!this._signRender)
+            _continueSpawnCallback?.Invoke();
+            if (!_signRender)
             {
                 return;
             }
-            this._signRender.ShowOpen();
+            _signRender.ShowOpen();
         }
 
-        public void CheckStatus()
-        {
-            if (!this.StatusReverse) return;
-            
-            if (this.statusOpened)
-            {
-                this.OnClose();
-                this.statusOpened = false;
-            }
-            else
-            {
-                this.OnOpen();
-                statusOpened = true;
-            }
-
-            this.StatusReverse = false;
-        }
+        // public void CheckStatus()
+        // {
+        //     if (!StatusReverse) return;
+        //     
+        //     if (statusOpened)
+        //     {
+        //         OnClose();
+        //         statusOpened = false;
+        //     }
+        //     else
+        //     {
+        //         OnOpen();
+        //         statusOpened = true;
+        //     }
+        //
+        //     StatusReverse = false;
+        // }
 
         public void StatusChange()
         {
-            if (this.statusOpened)
+            if (statusOpened)
             {
-                this.OnClose();
-                this.statusOpened = false;
+                OnClose();
+                statusOpened = false;
             }
             else
             {
-                this.OnOpen();
+                OnOpen();
                 statusOpened = true;
             }
         }
-        private void Update()
-        {
-            this.CheckStatus();
-        }
+        // private void Update()
+        // {
+        //     this.CheckStatus();
+        // }
         
         //Test
         private void CallbackClose()
