@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.20532313, g: 0.51090133, b: 0.5378542, a: 1}
+  m_IndirectSpecularColor: {r: 0.2051761, g: 0.5108654, b: 0.5378195, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2414,6 +2414,52 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 320560574507051718}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1290304229
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1290304231}
+  - component: {fileID: 1290304230}
+  m_Layer: 0
+  m_Name: Store Sign
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1290304230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290304229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9852a57a750642bd8883f75d5ebabb38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statusReverse: 0
+  statusOpened: 0
+--- !u!4 &1290304231
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290304229}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -19.949, y: -6.703, z: 10.269}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1323788338
 GameObject:
   m_ObjectHideFlags: 0
@@ -17336,3 +17382,4 @@ SceneRoots:
   - {fileID: 7354474913373727095}
   - {fileID: 2116461703}
   - {fileID: 715239409}
+  - {fileID: 1290304231}
