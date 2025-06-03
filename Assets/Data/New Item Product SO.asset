@@ -12,105 +12,130 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6da3313fb4d15734b9117d33ee5f152f, type: 3}
   m_Name: New Item Product SO
   m_EditorClassIdentifier: 
-  lsFoods:
-  - id: 0
-    name: Milk
-    sellPrice: 45
-    buyPrice: 30
-    itemType: 1
-  - id: 1
-    name: Bread
-    sellPrice: 40
-    buyPrice: 25
-    itemType: 1
-  - id: 2
-    name: 'Bottle      '
-    sellPrice: 35
-    buyPrice: 20
-    itemType: 1
-  - id: 3
-    name: 'Donut       '
-    sellPrice: 38
-    buyPrice: 22
-    itemType: 1
-  - id: 4
-    name: 'Muffin      '
-    sellPrice: 39
-    buyPrice: 23
-    itemType: 1
-  - id: 5
-    name: 'Bim bim      '
-    sellPrice: 30
-    buyPrice: 15
-    itemType: 1
-  - id: 6
-    name: 'French fries      '
-    sellPrice: 44
-    buyPrice: 28
-    itemType: 1
-  - id: 7
-    name: 'Cup Cake      '
-    sellPrice: 42
-    buyPrice: 26
-    itemType: 1
-  - id: 8
-    name: 'Cake Slide      '
-    sellPrice: 48
-    buyPrice: 29
-    itemType: 1
-  - id: 9
-    name: 'Berger      '
-    sellPrice: 45
-    buyPrice: 27
-    itemType: 1
-  lsTechs:
-  - id: 100
-    name: "Gi\u1EA5y v\u1EC7 sinh      "
-    sellPrice: 35
-    buyPrice: 20
-    itemType: 2
-  - id: 101
-    name: 'Computer_Monitor      '
-    sellPrice: 290
-    buyPrice: 200
-    itemType: 2
-  - id: '102      '
-    name: 'Computer_2tr      '
-    sellPrice: 260
-    buyPrice: 180
-    itemType: 0
-  - id: '103      '
-    name: 'Camera_DSLR      '
-    sellPrice: 340
-    buyPrice: 250
-    itemType: 2
-  - id: '104      '
-    name: 'Camera_Mirrorless      '
-    sellPrice: 310
-    buyPrice: 220
-    itemType: 2
-  - id: '105      '
-    name: 'Acer      '
-    sellPrice: 370
-    buyPrice: 270
-    itemType: 2
-  - id: '106      '
-    name: 'Mac      '
-    sellPrice: 480
-    buyPrice: 350
-    itemType: 2
-  - id: '107      '
-    name: '5090      '
-    sellPrice: 500
-    buyPrice: 380
-    itemType: 2
-  - id: '108      '
-    name: 'WinXP      '
-    sellPrice: 150
-    buyPrice: 100
-    itemType: 2
-  - id: '109      '
-    name: '3060      '
-    sellPrice: 390
-    buyPrice: 280
-    itemType: 2
+  lsItemProducts:
+  - idProduct: 1
+    nameProduct: Milk
+    size: {x: 1.5, y: 1.5, z: 3}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
+  - idProduct: 0
+    nameProduct: 
+    size: {x: 0, y: 0, z: 0}
+    amountPerBox: 0
+    sellPrice: 0
+    buyPrice: 0
+    boxRef: 0
