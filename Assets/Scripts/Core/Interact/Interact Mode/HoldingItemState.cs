@@ -1,43 +1,39 @@
 using Core.Event;
-using Core.Input;
 using DG.Tweening;
+using KatLib.State_Machine;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Core.Interact.Interact_Mode
 {
-    public enum HandPositionType
-    {
-        Left,
-        Middle,
-    }
-    
     [System.Serializable]
-    public class OnHandMode : InteractModeBase
+    public class HoldingItemState : InteractState
     {
-        [SerializeField] protected  float returnHandDuration = 0.2f;
-        [SerializeField] protected Transform leftHandPos;
-        [SerializeField] protected Transform middleHandPos;
-        [SerializeField] protected float throwForce = 10f;
-        [SerializeField] protected float minThrowAngle = 30f;
-        protected InputAction intoPlaceModeAction;
-        protected InputAction throwAction;
+        public enum HandPositionType
+        {
+            Left,
+            Middle,
+        }
         
-        //Message
-        public const string CurrentAngleLessMinAngle = "Cannot Throw With Current Angle"; 
-        
+        public const string CurrentAngleLessMinAngle = "Cannot Throw With Current Angle";
+
+
+        public HoldingItemState(InteractData data, Interactor interactor, StateMachine<InteractMode, InteractState> stateMachine) 
+            : base(data, interactor, stateMachine)
+        {
+        }
+
         public override YieldInstruction OnUpdate()
         {
-            if (intoPlaceModeAction.WasPressedThisFrame())
+            if (data.IntoPlaceModeAction.WasPressedThisFrame())
             {
                 SwitchToPlaceMode();
                 return null;
             }
 
-            if (!throwAction.WasPressedThisFrame()) return null;
+            if (!data.ThrowAction.WasPressedThisFrame()) return null;
             float currentAngle = Vector3.Angle(data.CamTransform.forward, Vector3.down);
 
-            if (currentAngle < minThrowAngle)
+            if (currentAngle < data.MinThrowAngle)
             {
                 InteractEvent.OnThrowIgnore?.Invoke(CurrentAngleLessMinAngle);
                 return null;
@@ -47,38 +43,29 @@ namespace Core.Interact.Interact_Mode
             return null;
         }
 
-        public override void Init(Interactor interactor, InteractData interactData)
-        {
-            base.Init(interactor, interactData);
-            var defaultActions = InputManager.Instance.PlayerInputMap.Default;
-            
-            intoPlaceModeAction = defaultActions.IntoPlaceMode;
-            throwAction = defaultActions.Throw;
-        }
-
         public void AttachItemToHand(ObjectAttackToHand item)
         {
             if(!item) return;
             
             this.data.CurrentTarget = item;
-            data.CurrentInteractMode = InteractMode.OnHand;
             item.SetActiveCollision(false);
             Transform interactTransform = item.transform;
             var curHand = GetHandTransform(item.HandPosition);
             this.data.CurrentHandTransform = curHand;
             interactTransform.SetParent(curHand);
-            interactTransform.DOLocalMove(Vector3.zero, returnHandDuration);
-            interactTransform.DOLocalRotate(Vector3.zero, returnHandDuration);
+            interactTransform.DOLocalMove(Vector3.zero, data.ReturnHandDuration);
+            interactTransform.DOLocalRotate(Vector3.zero, data.ReturnHandDuration);
+            stateMachine.ChangeState(InteractMode.HoldingItem);
         }
         
         private void SwitchToPlaceMode()
         {
-            if(this.data.CurrentInteractMode != InteractMode.OnHand) return;
+            if(stateMachine.CurrentStateID != InteractMode.HoldingItem) return;
             
-            this.data.CurrentInteractMode = InteractMode.Place;
             var CurrentTarget = this.data.CurrentTarget;
             Transform targetTransform = CurrentTarget.transform;
             data.CurrentPlaceObject = targetTransform.GetComponent<IPlacable>();
+            stateMachine.ChangeState(InteractMode.PlacingObject);
         }
         
         public Transform GetHandTransform(HandPositionType handPositionType)
@@ -86,9 +73,9 @@ namespace Core.Interact.Interact_Mode
             switch (handPositionType)
             {
                 case HandPositionType.Left:
-                    return leftHandPos;
+                    return data.LeftHandPos;
                 case HandPositionType.Middle:
-                    return middleHandPos;
+                    return data.MiddleHandPos;
             }
 
             return null;
@@ -100,9 +87,10 @@ namespace Core.Interact.Interact_Mode
             target.transform.SetParent(null);
             target.ResetToIdle();
             var rb = target.GetComponent<Rigidbody>();
-            rb.AddForce(data.CamTransform.forward * throwForce, ForceMode.VelocityChange);
+            rb.AddForce(data.CamTransform.forward * data.ThrowForce, ForceMode.VelocityChange);
             data.ResetCurrentTarget();
-            data.CurrentInteractMode = InteractMode.Default;
+            stateMachine.ChangeState(InteractMode.Idle);
         }
     }
 }
+

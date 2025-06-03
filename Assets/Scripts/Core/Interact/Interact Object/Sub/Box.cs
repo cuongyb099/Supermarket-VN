@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core.Constant;
 using Core.Input;
 using DG.Tweening;
+using KatJsonInventory.Item;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -13,12 +14,13 @@ namespace Core.Interact
     {
         [SerializeField] protected Grid3D Grid3D;
         [SerializeField] protected Animator anim;
-        [SerializeField] protected GameObject item;
         [SerializeField] private Vector3Int itemSize;
         public bool IsOpen { get; protected set; }
-        protected List<Vector3> cacheItemPosition = new List<Vector3>();
         protected const float animTransition = 0.25f;
         protected Coroutine coroutine;
+        protected List<ItemBase> items = new List<ItemBase>();
+        protected List<Vector3> itemPositions = new List<Vector3>();
+        protected HashSet<Vector3Int> existCell = new HashSet<Vector3Int>();
         
         protected override void Reset()
         {
@@ -27,16 +29,23 @@ namespace Core.Interact
             Grid3D = GetComponentInChildren<Grid3D>();
             anim = GetComponentInChildren<Animator>();
         }
-      
-        protected HashSet<Vector3Int> existCell = new HashSet<Vector3Int>();
-    
-        protected override void Awake()
+
+        public void AddItem(ItemBase item)
         {
-            base.Awake();
-            AutoFillItem();
+            if (items.Count == 0)
+            {
+                itemPositions.Clear();
+                AutoFillItem(item.gameObject);
+                return;
+            }
+
+            var firstItem = items[0];
+            if(firstItem.GetItemData().ID != item.GetItemData().ID) return;
+            
+            items.Add(firstItem);
         }
-    
-        public void CreateItems(Vector3Int startCellPosition, Vector3Int itemSize, bool isMidX, bool isMidZ)
+        
+        protected void CreateItems(GameObject item, Vector3Int startCellPosition, Vector3Int itemSize, bool isMidX, bool isMidZ)
         {
             int count = 0;
             Vector3 objectPosition = Vector3.zero;
@@ -73,10 +82,10 @@ namespace Core.Interact
             }
             
             itemClone.transform.position = itemWorldPosition;
-            cacheItemPosition.Add(itemClone.transform.localPosition);
+            itemPositions.Add(itemClone.transform.localPosition);
         }
 
-        protected override void OnInteract(Transform source)
+        protected override void OnInteract(Interactor source)
         {
             base.OnInteract(source);
             
@@ -89,18 +98,17 @@ namespace Core.Interact
             coroutine = StartCoroutine(CheckInput());
         }
 
-        [ContextMenu("OpenBox")]
-        public void OpenBox()
+        protected void OpenBox()
         {
             anim.CrossFadeInFixedTime(AnimConstant.OpenBox, animTransition);
         }
-        [ContextMenu("CloseBox")]
-        public void CloseBox()
+        
+        protected  void CloseBox()
         {
             anim.CrossFadeInFixedTime(AnimConstant.CloseBox, animTransition);
         }
 
-        public void AutoFillItem()
+        protected void AutoFillItem(GameObject item)
         {
             int maxItemX = Grid3D.Size.x / itemSize.x;
             int maxItemY = Grid3D.Size.y / itemSize.y;
@@ -137,7 +145,7 @@ namespace Core.Interact
                 bool isMidX = spaceX == 999;
                 bool isMidZ = spaceZ == 999;;
                 
-                CreateItems(cellPosition, itemSize, isMidX, isMidZ);
+                CreateItems(item, cellPosition, itemSize, isMidX, isMidZ);
             }
         }
 
@@ -164,6 +172,4 @@ namespace Core.Interact
             StopCoroutine(coroutine);
         }
     }
-    
-    
 }

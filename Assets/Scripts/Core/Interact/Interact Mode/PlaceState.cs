@@ -1,46 +1,22 @@
-using System.Collections.Generic;
-using Core.Input;
 using Core.Utilities;
+using KatLib.State_Machine;
 using UnityEngine;
-using UnityEngine.InputSystem;
-#if UNITY_EDITOR
-    using Matrix4x4 = UnityEngine.Matrix4x4;
-#endif
-using Quaternion = UnityEngine.Quaternion;
-using Vector2 = UnityEngine.Vector2;
-using Vector3 = UnityEngine.Vector3;
 
 namespace Core.Interact.Interact_Mode
 {
     [System.Serializable]
-    public class PlaceMode : InteractModeBase
+    public class PlaceState : InteractState 
     {
-        [SerializeField] protected LayerMask layer;
-        [SerializeField] protected Color canPlaceColor = Color.green;
-        [SerializeField] protected Color cannotPlaceColor = Color.red;
-        [SerializeField] protected List<string> overlapTagsCheck;
-        [SerializeField] protected float angleEachRotate = 15f;
-        [SerializeField] protected float throwForce = 10f;
-        
-        protected InputAction PlacePerform;
-        protected InputAction rotateAction;
-        protected InputAction exitAction;
-        
         protected PlaceHitbox hitbox;
-        
         protected Vector3 overlapPosition;
         protected Vector3 overlapAngles;
         protected const float smoothSpeed = 15f;
         protected float currentRotateAngle;
         protected bool canPlace;
-        
-        public override void Init(Interactor interactor, InteractData interactData)
+
+        public PlaceState(InteractData data, Interactor interactor, StateMachine<InteractMode, InteractState> stateMachine) 
+            : base(data, interactor, stateMachine)
         {
-            base.Init(interactor, interactData);
-            var defaultActions = InputManager.Instance.PlayerInputMap.Default;
-            PlacePerform = defaultActions.Interact;
-            rotateAction = defaultActions.RotateItem;
-            exitAction = defaultActions.Exit;
         }
 
         public override YieldInstruction OnUpdate()
@@ -71,7 +47,7 @@ namespace Core.Interact.Interact_Mode
                 overlapAngles.x = 0;
                 overlapPosition.y += hitbox.transform.localPosition.y;
                 int overlapCount = Physics.OverlapBoxNonAlloc(overlapPosition, hitbox.Size / 2
-                    , data.OverlapHits, Quaternion.Euler(overlapAngles), layer);
+                    , data.OverlapHits, Quaternion.Euler(overlapAngles), data.RaycastLayer);
                 
                 for (int i = 0; i < overlapCount; i++)
                 {
@@ -85,20 +61,20 @@ namespace Core.Interact.Interact_Mode
 
             UpdateRotationAngleOffset();
 
-            if (exitAction.WasPerformedThisFrame())
+            if (data.ExitAction.WasPerformedThisFrame())
             {
                 data.CurrentIndicatable.DisableIndicator();
                 interactor.AttachItemToHand((ObjectAttackToHand)data.CurrentTarget);
                 return null;
             }
             
-            if (canPlace && PlacePerform.WasPerformedThisFrame())
+            if (canPlace && data.PlacePerform.WasPerformedThisFrame())
             {
                 ResetCurrentObject();
                 return null;
             }
             
-            data.CurrentIndicatable.EnableIndicator(canPlace ? canPlaceColor : cannotPlaceColor);
+            data.CurrentIndicatable.EnableIndicator(canPlace ? data.CanPlaceColor : data.CannotPlaceColor);
 
             Quaternion targetRot;
             
@@ -126,15 +102,15 @@ namespace Core.Interact.Interact_Mode
 
         private void UpdateRotationAngleOffset()
         {
-            var rotateSpeed = rotateAction.ReadValue<Vector2>().y;
+            var rotateSpeed = data.RotateAction.ReadValue<Vector2>().y;
             
             if (rotateSpeed > 0 && rotateSpeed != 0)
             {
-                currentRotateAngle += angleEachRotate;
+                currentRotateAngle += data.AngleEachRotate;
             }
             else if(rotateSpeed != 0)
             {
-                currentRotateAngle -= angleEachRotate;   
+                currentRotateAngle -= data.AngleEachRotate;   
             }
 
             currentRotateAngle = currentRotateAngle.NormalizeAngle();
@@ -142,7 +118,7 @@ namespace Core.Interact.Interact_Mode
 
         private bool CheckingPlace(Collider collider)
         {
-            foreach (var tag in overlapTagsCheck)
+            foreach (var tag in data.OverlapTagsCheck)
             {
                 if(!collider.CompareTag(tag)) continue;
                 return true;
@@ -154,8 +130,8 @@ namespace Core.Interact.Interact_Mode
         {
             data.CurrentTarget.ResetToIdle();
             data.CurrentIndicatable.DisableIndicator();
-            data.CurrentInteractMode = InteractMode.Default;
             data.ResetCurrentTarget();
+            stateMachine.ChangeState(InteractMode.Idle);
         }
         
 #if UNITY_EDITOR
@@ -171,3 +147,4 @@ namespace Core.Interact.Interact_Mode
 #endif
     }
 }
+

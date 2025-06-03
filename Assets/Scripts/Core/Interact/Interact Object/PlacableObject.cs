@@ -21,11 +21,11 @@ namespace Core.Interact
             rb.interpolation = RigidbodyInterpolation.Interpolate;
         }
 
-        protected override void OnInteract(Transform source)
+        protected override void OnInteract(Interactor source)
         {
             CanInteract = false;
             base.OnInteract(source);
-            this.ObjectOutline.DisableOutline();
+            this.outline.DisableOutline();
             rb.interpolation = RigidbodyInterpolation.None;
         }
 

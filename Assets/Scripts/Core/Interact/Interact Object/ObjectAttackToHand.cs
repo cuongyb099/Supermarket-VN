@@ -5,9 +5,9 @@ namespace Core.Interact
 {
     public abstract class ObjectAttackToHand : InteractObject
     {
-        [field: SerializeField] public virtual HandPositionType HandPosition { get; protected set; }
+        [field: SerializeField] public virtual HoldingItemState.HandPositionType HandPosition { get; protected set; }
         
-        protected override void OnInteract(Transform source)
+        protected override void OnInteract(Interactor source)
         {
             source.GetComponent<Interactor>().AttachItemToHand(this);
         }

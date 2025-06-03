@@ -26,10 +26,10 @@ namespace Core.Interact
             rightDoor = transform.GetChild(1);
         }
 
-        protected override void OnInteract(Transform source)
+        protected override void OnInteract(Interactor source)
         {
             this.CanInteract = false;
-            this.ObjectOutline.DisableOutline();
+            this.outline.DisableOutline();
             SetActiveCollision(false);
             OpenDoor();
 
