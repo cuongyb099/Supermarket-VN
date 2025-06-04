@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22a49f560c8746408a9584598e8e0057, type: 3}
+  m_Name: Trajectory Curve Box
+  m_EditorClassIdentifier: 
+  <MaxHeight>k__BackingField: 0.15
+  <Duration>k__BackingField: 0.35
+  <Curve>k__BackingField:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2.8535635
+      outSlope: 2.8535635
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.07571048
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: -0.023746816
+      outSlope: -0.023746816
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.21382208
+      outWeight: 0.07480952
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -3.0057697
+      outSlope: -3.0057697
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.07878828
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  <EaseMode>k__BackingField: 5

@@ -68,7 +68,6 @@ namespace Core.Interact
             AddressablesManager.Instance.Release(outlineFillKey);
         }
 
-        [ContextMenu("Enable Outline")]
         public override void EnableOutline()
         {
             if(IsEnable) return;
@@ -93,7 +92,6 @@ namespace Core.Interact
             UpdateMaterialProperties();
         }
 
-        [ContextMenu("Disable Outline")]
         public override void DisableOutline()
         {
             if(!IsEnable) return;

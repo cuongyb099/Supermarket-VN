@@ -6,8 +6,6 @@ namespace Core.Interact.Interact_Mode
 	[System.Serializable]
 	public class IdleState : InteractState
 	{
-		protected const int checkPerSecond = 10;
-
 		public IdleState(InteractData data, Interactor interactor, StateMachine<InteractMode, InteractState> stateMachine) : base(data, interactor, stateMachine)
 		{
 		
@@ -15,20 +13,24 @@ namespace Core.Interact.Interact_Mode
 
 		public override YieldInstruction OnUpdate()
 		{
-			if (data.Interact.WasPressedThisFrame() && data.CurrentTarget)
+			if (data.LeftInteract.WasPressedThisFrame() && data.CurrentTargetFristSlot)
 			{
-				data.CurrentTarget.Interact(this.interactor);
+				data.CurrentTargetFristSlot.Interact(this.interactor);
 				stateMachine.ChangeState(InteractMode.HoldingItem);
 				return null;
 			}
-			
+		
+			return CheckInteractObject(ref data.CurrentTargetFristSlot);
+		}
+
+		protected virtual YieldInstruction CheckInteractObject(ref InteractObject interactObject)
+		{
 			Transform cameraTransform = this.data.CamTransform;
-			InteractObject currentTarget = this.data.CurrentTarget;
 			RaycastHit[] hits = this.data.RayHits;
 			float rayDistance = this.data.RayDistance;
-			if (currentTarget is { CanInteract: false })
+			if (interactObject is { CanInteract: false })
 			{
-				currentTarget = null;
+				interactObject = null;
 			}
                 
 			int hitCount = Physics.RaycastNonAlloc(cameraTransform.position, 
@@ -41,14 +43,15 @@ namespace Core.Interact.Interact_Mode
 				if(!hit.transform.TryGetComponent(out InteractObject interactable) 
 				   || !interactable.CanInteract) continue;
                 
-				currentTarget?.UnFocus();
-				data.CurrentTarget = interactable;
-				interactable.Focus();
+				interactObject?.UnFocus(this.interactor);
+				interactable.Focus(this.interactor);
+				if(!interactable.CanInteract) return null;
+				interactObject = interactable;
 				return null;
 			}
 
-			currentTarget?.UnFocus();
-			data.ResetCurrentTarget();
+			interactObject?.UnFocus(this.interactor);
+			data.ResetTargetSlot(ref interactObject);
 
 			return null;
 		}

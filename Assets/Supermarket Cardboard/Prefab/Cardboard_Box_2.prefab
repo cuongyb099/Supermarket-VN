@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 8965353454354769655}
   - component: {fileID: 3164797872584182806}
   - component: {fileID: 1227292622570374807}
+  - component: {fileID: 6586682014028231607}
   m_Layer: 0
   m_Name: Cardboard_Box_2
   m_TagString: Untagged
@@ -137,9 +138,9 @@ MonoBehaviour:
   <HandPosition>k__BackingField: 1
   placeHitBox: {fileID: 3951035393629771284}
   Grid3D: {fileID: 2271620030872507035}
-  anim: {fileID: 0}
-  item: {fileID: 0}
-  itemSize: {x: 4, y: 5, z: 5}
+  anim: {fileID: 2729528343880636927}
+  trajectoryCurve: {fileID: 11400000, guid: 1cfdef264e44d4f46b06520f7129606c, type: 2}
+  prefab: {fileID: 7161606492927500892, guid: cc7440996b571bb40ade7ea6928a01e7, type: 3}
 --- !u!65 &8965353454354769655
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -147,7 +148,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2613638081528252561}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 08d8c86db764fd746a0c618536f09afc, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -172,7 +173,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_CenterOfMass: {x: 0, y: 0, z: 0.0000001}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
@@ -181,12 +182,12 @@ Rigidbody:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_ImplicitCom: 1
+  m_ImplicitCom: 0
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &1227292622570374807
 MonoBehaviour:
@@ -200,7 +201,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 0}
+  config: {fileID: 11400000, guid: 7d555af241046754990e967322968c2b, type: 2}
+--- !u!114 &6586682014028231607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2613638081528252561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2994b8c3ef0942cd8ce09425a528a609, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2914890054413576907
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,7 +323,7 @@ Transform:
   m_GameObject: {fileID: 3650073099738036117}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.166, y: 0, z: -0.18}
+  m_LocalPosition: {x: -0.166, y: 0.03, z: -0.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

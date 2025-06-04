@@ -49,7 +49,7 @@ namespace Core.Interact
         }
 
         public void AttachItemToHand(ObjectAttackToHand item) => holdingItem.AttachItemToHand(item);
-        public InteractObject CurrentObjectInHand => interactData.CurrentTarget;
+        public InteractObject CurrentObjectInHand => interactData.CurrentTargetFristSlot;
         public InteractMode CurrentInteractMode => stateMachine.CurrentStateID;
         
 #if UNITY_EDITOR

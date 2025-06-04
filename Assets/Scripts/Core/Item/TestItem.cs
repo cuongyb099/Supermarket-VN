@@ -1,10 +1,9 @@
+using Core.Interact;
 using KatJsonInventory.Item;
 using UnityEngine;
 
-public class Test : ItemWithSize
+public class TestItem : Product
 {
-    public Vector3Int Size;
-    
     public override void Init(ItemData itemData)
     {
         throw new System.NotImplementedException();
@@ -15,5 +14,8 @@ public class Test : ItemWithSize
         throw new System.NotImplementedException();
     }
 
+    public Vector3Int Size;
     public override Vector3Int GetSize() => Size;
+    public RenderOnTop Render;
+    public override RenderOnTop RenderOnTop => Render;
 }

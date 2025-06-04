@@ -55,6 +55,15 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Interact2"",
+                    ""type"": ""Button"",
+                    ""id"": ""4079e9ab-fcff-4fe9-a547-51e2c98395a4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Run"",
                     ""type"": ""Button"",
                     ""id"": ""c5aa6912-cf75-439c-8cae-45e7f949579f"",
@@ -252,6 +261,17 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
                     ""action"": ""Close"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d5dd2188-6d15-41b0-ba38-7b1b5bbbdcb6"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -263,6 +283,7 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
         m_Default_Look = m_Default.FindAction("Look", throwIfNotFound: true);
         m_Default_Move = m_Default.FindAction("Move", throwIfNotFound: true);
         m_Default_Interact = m_Default.FindAction("Interact", throwIfNotFound: true);
+        m_Default_Interact2 = m_Default.FindAction("Interact2", throwIfNotFound: true);
         m_Default_Run = m_Default.FindAction("Run", throwIfNotFound: true);
         m_Default_IntoPlaceMode = m_Default.FindAction("Into PlaceMode", throwIfNotFound: true);
         m_Default_RotateItem = m_Default.FindAction("Rotate Item", throwIfNotFound: true);
@@ -333,6 +354,7 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
     private readonly InputAction m_Default_Look;
     private readonly InputAction m_Default_Move;
     private readonly InputAction m_Default_Interact;
+    private readonly InputAction m_Default_Interact2;
     private readonly InputAction m_Default_Run;
     private readonly InputAction m_Default_IntoPlaceMode;
     private readonly InputAction m_Default_RotateItem;
@@ -346,6 +368,7 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Default_Look;
         public InputAction @Move => m_Wrapper.m_Default_Move;
         public InputAction @Interact => m_Wrapper.m_Default_Interact;
+        public InputAction @Interact2 => m_Wrapper.m_Default_Interact2;
         public InputAction @Run => m_Wrapper.m_Default_Run;
         public InputAction @IntoPlaceMode => m_Wrapper.m_Default_IntoPlaceMode;
         public InputAction @RotateItem => m_Wrapper.m_Default_RotateItem;
@@ -370,6 +393,9 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @Interact2.started += instance.OnInteract2;
+            @Interact2.performed += instance.OnInteract2;
+            @Interact2.canceled += instance.OnInteract2;
             @Run.started += instance.OnRun;
             @Run.performed += instance.OnRun;
             @Run.canceled += instance.OnRun;
@@ -401,6 +427,9 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @Interact2.started -= instance.OnInteract2;
+            @Interact2.performed -= instance.OnInteract2;
+            @Interact2.canceled -= instance.OnInteract2;
             @Run.started -= instance.OnRun;
             @Run.performed -= instance.OnRun;
             @Run.canceled -= instance.OnRun;
@@ -441,6 +470,7 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnInteract2(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnIntoPlaceMode(InputAction.CallbackContext context);
         void OnRotateItem(InputAction.CallbackContext context);

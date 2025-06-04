@@ -13,7 +13,9 @@ namespace Core.Interact.Interact_Mode
         protected const float smoothSpeed = 15f;
         protected float currentRotateAngle;
         protected bool canPlace;
-
+        protected IIndicatable currentIndicatable;
+        protected IPlacable currentPlace => (IPlacable)data.CurrentTargetFristSlot;
+        
         public PlaceState(InteractData data, Interactor interactor, StateMachine<InteractMode, InteractState> stateMachine) 
             : base(data, interactor, stateMachine)
         {
@@ -21,12 +23,12 @@ namespace Core.Interact.Interact_Mode
 
         public override YieldInstruction OnUpdate()
         {
-            data.CurrentIndicatable ??= data.CurrentTarget.GetComponent<IIndicatable>();
+            currentIndicatable ??= data.CurrentTargetFristSlot.GetComponent<IIndicatable>();
             
             float RayDistance = this.data.RayDistance;
             RaycastHit[] hits = this.data.RayHits;
             Transform cameraTransform = this.data.CamTransform;
-            InteractObject CurrentTarger = this.data.CurrentTarget;
+            InteractObject CurrentTarger = this.data.CurrentTargetFristSlot;
             
             Transform targetTransform = CurrentTarger.transform;
             float rayLenght = RayDistance * 1.5f;
@@ -34,7 +36,7 @@ namespace Core.Interact.Interact_Mode
             int hitCount = Physics.RaycastNonAlloc(cameraTransform.position, 
                 cameraTransform.forward, hits, rayLenght);
                 
-            hitbox = data.CurrentPlaceObject.GetPlaceHitBox();
+            hitbox = currentPlace.GetPlaceHitBox();
 
             canPlace = false;
             RaycastHit hit = default;
@@ -63,8 +65,8 @@ namespace Core.Interact.Interact_Mode
 
             if (data.ExitAction.WasPerformedThisFrame())
             {
-                data.CurrentIndicatable.DisableIndicator();
-                interactor.AttachItemToHand((ObjectAttackToHand)data.CurrentTarget);
+                currentIndicatable.DisableIndicator();
+                interactor.AttachItemToHand((ObjectAttackToHand)data.CurrentTargetFristSlot);
                 return null;
             }
             
@@ -74,7 +76,7 @@ namespace Core.Interact.Interact_Mode
                 return null;
             }
             
-            data.CurrentIndicatable.EnableIndicator(canPlace ? data.CanPlaceColor : data.CannotPlaceColor);
+            currentIndicatable.EnableIndicator(canPlace ? data.CanPlaceColor : data.CannotPlaceColor);
 
             Quaternion targetRot;
             
@@ -128,10 +130,12 @@ namespace Core.Interact.Interact_Mode
 
         private void ResetCurrentObject()
         {
-            data.CurrentTarget.ResetToIdle();
-            data.CurrentIndicatable.DisableIndicator();
-            data.ResetCurrentTarget();
+            data.CurrentTargetFristSlot.ResetToIdle();
+            currentIndicatable.DisableIndicator();
             stateMachine.ChangeState(InteractMode.Idle);
+            data.CurrentHandTransform = null;
+            data.CurrentTargetFristSlot = null;
+            currentIndicatable = null;
         }
         
 #if UNITY_EDITOR

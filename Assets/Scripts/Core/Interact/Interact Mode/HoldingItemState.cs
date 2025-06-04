@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Core.Interact.Interact_Mode
 {
     [System.Serializable]
-    public class HoldingItemState : InteractState
+    public class HoldingItemState : IdleState
     {
         public enum HandPositionType
         {
@@ -24,6 +24,13 @@ namespace Core.Interact.Interact_Mode
 
         public override YieldInstruction OnUpdate()
         {
+            if (data.LeftInteract.WasPressedThisFrame() || data.RightInteract.WasPressedThisFrame())
+            {
+                data.CurrentTargetSecondSlot?.Interact(this.interactor);
+            }
+            
+            CheckInteractObject(ref data.CurrentTargetSecondSlot);
+            
             if (data.IntoPlaceModeAction.WasPressedThisFrame())
             {
                 SwitchToPlaceMode();
@@ -45,9 +52,8 @@ namespace Core.Interact.Interact_Mode
 
         public void AttachItemToHand(ObjectAttackToHand item)
         {
-            if(!item) return;
+            if(!item || data.CurrentTargetFristSlot != item) return;
             
-            this.data.CurrentTarget = item;
             item.SetActiveCollision(false);
             Transform interactTransform = item.transform;
             var curHand = GetHandTransform(item.HandPosition);
@@ -60,11 +66,10 @@ namespace Core.Interact.Interact_Mode
         
         private void SwitchToPlaceMode()
         {
-            if(stateMachine.CurrentStateID != InteractMode.HoldingItem) return;
+            var CurrentTarget = this.data.CurrentTargetFristSlot;
             
-            var CurrentTarget = this.data.CurrentTarget;
-            Transform targetTransform = CurrentTarget.transform;
-            data.CurrentPlaceObject = targetTransform.GetComponent<IPlacable>();
+            if(CurrentTarget is not IPlacable) return;
+            
             stateMachine.ChangeState(InteractMode.PlacingObject);
         }
         
@@ -83,12 +88,12 @@ namespace Core.Interact.Interact_Mode
         
         public void ThrowObject()
         {
-            var target = data.CurrentTarget;
+            var target = data.CurrentTargetFristSlot;
             target.transform.SetParent(null);
             target.ResetToIdle();
             var rb = target.GetComponent<Rigidbody>();
             rb.AddForce(data.CamTransform.forward * data.ThrowForce, ForceMode.VelocityChange);
-            data.ResetCurrentTarget();
+            data.ResetTargetSlot(ref data.CurrentTargetFristSlot);
             stateMachine.ChangeState(InteractMode.Idle);
         }
     }

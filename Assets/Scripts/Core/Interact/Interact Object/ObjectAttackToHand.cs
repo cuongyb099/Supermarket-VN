@@ -6,16 +6,25 @@ namespace Core.Interact
     public abstract class ObjectAttackToHand : InteractObject
     {
         [field: SerializeField] public virtual HoldingItemState.HandPositionType HandPosition { get; protected set; }
+        protected RenderOnTop renderOnTop;
         
+        protected override void Awake()
+        {
+            base.Awake();
+            renderOnTop = GetComponent<RenderOnTop>();
+        }
+
         protected override void OnInteract(Interactor source)
         {
             source.GetComponent<Interactor>().AttachItemToHand(this);
+            renderOnTop.SetOnTop();
         }
 
         public override void ResetToIdle()
         {
             base.ResetToIdle();
             CanInteract = true;
+            renderOnTop.ReturnDefault();
         }
     }
 }

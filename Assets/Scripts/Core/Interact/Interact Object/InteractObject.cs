@@ -19,12 +19,12 @@ namespace Core.Interact
 	        OnInteract(source);
         }
 
-        public virtual void Focus()
+        public virtual void Focus(Interactor source)
         {
 	        outline.EnableOutline();
         }
 
-        public virtual void UnFocus()
+        public virtual void UnFocus(Interactor source)
         {
 	        outline.DisableOutline();
         }

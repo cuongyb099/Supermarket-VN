@@ -18,9 +18,8 @@ namespace Core.Interact
         [NonSerialized] public RaycastHit[] RayHits = new RaycastHit[10];
         [NonSerialized] public Collider[] OverlapHits = new Collider[10];
         
-        public InteractObject CurrentTarget;
-        public IPlacable CurrentPlaceObject;
-        public IIndicatable CurrentIndicatable;
+        public InteractObject CurrentTargetFristSlot;
+        public InteractObject CurrentTargetSecondSlot;
         
         public InputMap.DefaultActions DefaultMap => InputManager.Instance.PlayerInputMap.Default;
         public InputAction PlacePerform => DefaultMap.Interact;
@@ -28,7 +27,8 @@ namespace Core.Interact
         public InputAction ExitAction => DefaultMap.Exit;
         public InputAction IntoPlaceModeAction => DefaultMap.IntoPlaceMode;
         public InputAction ThrowAction => DefaultMap.Throw;
-        public InputAction Interact => DefaultMap.Interact;
+        public InputAction LeftInteract => DefaultMap.Interact;
+        public InputAction RightInteract => DefaultMap.Interact2;
         
         [field: Header("HoldingItem Config")]
         [field: SerializeField] public float ReturnHandDuration { get; private set; } = 0.2f;
@@ -43,11 +43,10 @@ namespace Core.Interact
         [field: SerializeField] public List<string> OverlapTagsCheck{ get; private set; }
         [field: SerializeField] public float AngleEachRotate { get; private set; } = 15f;
 
-        public void ResetCurrentTarget()
+        public void ResetTargetSlot(ref InteractObject targetSlot)
         {
-            CurrentTarget = null;
-            CurrentPlaceObject = null;
-            CurrentIndicatable = null;
+            targetSlot = null;
+            if(targetSlot == CurrentTargetSecondSlot) return;
             CurrentHandTransform = null;
         }
     }
