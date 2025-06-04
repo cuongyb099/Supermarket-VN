@@ -14,7 +14,7 @@ namespace Core.Sign
             _signSystem = GetComponent<SignSystem>();
         }
 
-        protected override void OnInteract(Transform source)
+        protected void OnInteract(Interactor source)
         {
             // this.CanInteract = false;
             // this.ObjectOutline.DisableOutline();

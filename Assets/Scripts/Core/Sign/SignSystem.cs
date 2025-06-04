@@ -12,28 +12,16 @@ namespace Core.Sign
         [SerializeField]
         public bool statusOpened;
         
-        private Action _continueSpawnCallback;
-        private Action _pauseSpawnCallback;
-
-        public Action ContinueSpawnCallback
-        {
-            get => _continueSpawnCallback;
-            set => _continueSpawnCallback = value;
-        }
-
-        public Action PauseSpawnCallback
-        {
-            get => _pauseSpawnCallback;
-            set => _pauseSpawnCallback = value;
-        }
+        static public Action ContinueSpawnCallback;
+        static public Action PauseSpawnCallback;
 
         private SignRender _signRender;
         
         private void Awake()
         {
             // Test
-            _continueSpawnCallback += CallbackOpen;
-            _pauseSpawnCallback += CallbackClose;
+            ContinueSpawnCallback += CallbackOpen;
+            PauseSpawnCallback += CallbackClose;
             
             StatusReverse = false;
             statusOpened = true;
@@ -43,7 +31,7 @@ namespace Core.Sign
 
         void OnClose()
         {
-            _pauseSpawnCallback?.Invoke();
+            PauseSpawnCallback?.Invoke();
             if (!_signRender)
             {
                 return;
@@ -53,7 +41,7 @@ namespace Core.Sign
 
         void OnOpen()
         {
-            _continueSpawnCallback?.Invoke();
+            ContinueSpawnCallback?.Invoke();
             if (!_signRender)
             {
                 return;
