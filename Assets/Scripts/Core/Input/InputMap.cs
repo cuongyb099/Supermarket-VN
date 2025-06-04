@@ -55,6 +55,15 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Interact2"",
+                    ""type"": ""Button"",
+                    ""id"": ""4079e9ab-fcff-4fe9-a547-51e2c98395a4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Run"",
                     ""type"": ""Button"",
                     ""id"": ""c5aa6912-cf75-439c-8cae-45e7f949579f"",
@@ -67,6 +76,42 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
                     ""name"": ""Into PlaceMode"",
                     ""type"": ""Button"",
                     ""id"": ""2655afa5-33e6-4b69-9ac4-fb44dd89343b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rotate Item"",
+                    ""type"": ""Value"",
+                    ""id"": ""8f49b0bd-322d-48ad-a9fc-6e5486f9fa6d"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Throw"",
+                    ""type"": ""Button"",
+                    ""id"": ""94721ab5-073d-41e3-8fca-cb17a2272f0e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Exit"",
+                    ""type"": ""Button"",
+                    ""id"": ""178d68c7-a868-4910-892b-92525fdc6df4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Close"",
+                    ""type"": ""Button"",
+                    ""id"": ""f50dc916-539f-4dff-ad11-6f04c4c354e1"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -172,6 +217,61 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
                     ""action"": ""Into PlaceMode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""70982ee4-415d-411a-9423-699b24963e6a"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": ""NormalizeVector2"",
+                    ""groups"": """",
+                    ""action"": ""Rotate Item"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""011a38d1-a7dc-4507-b358-71105995c0b6"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Throw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""806f48c8-16e0-4701-8fb2-6a8585414c38"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""de50bebe-8668-4bcd-a0d6-798c5d4b53c7"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Close"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d5dd2188-6d15-41b0-ba38-7b1b5bbbdcb6"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -183,8 +283,13 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
         m_Default_Look = m_Default.FindAction("Look", throwIfNotFound: true);
         m_Default_Move = m_Default.FindAction("Move", throwIfNotFound: true);
         m_Default_Interact = m_Default.FindAction("Interact", throwIfNotFound: true);
+        m_Default_Interact2 = m_Default.FindAction("Interact2", throwIfNotFound: true);
         m_Default_Run = m_Default.FindAction("Run", throwIfNotFound: true);
         m_Default_IntoPlaceMode = m_Default.FindAction("Into PlaceMode", throwIfNotFound: true);
+        m_Default_RotateItem = m_Default.FindAction("Rotate Item", throwIfNotFound: true);
+        m_Default_Throw = m_Default.FindAction("Throw", throwIfNotFound: true);
+        m_Default_Exit = m_Default.FindAction("Exit", throwIfNotFound: true);
+        m_Default_Close = m_Default.FindAction("Close", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -249,8 +354,13 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
     private readonly InputAction m_Default_Look;
     private readonly InputAction m_Default_Move;
     private readonly InputAction m_Default_Interact;
+    private readonly InputAction m_Default_Interact2;
     private readonly InputAction m_Default_Run;
     private readonly InputAction m_Default_IntoPlaceMode;
+    private readonly InputAction m_Default_RotateItem;
+    private readonly InputAction m_Default_Throw;
+    private readonly InputAction m_Default_Exit;
+    private readonly InputAction m_Default_Close;
     public struct DefaultActions
     {
         private @InputMap m_Wrapper;
@@ -258,8 +368,13 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Default_Look;
         public InputAction @Move => m_Wrapper.m_Default_Move;
         public InputAction @Interact => m_Wrapper.m_Default_Interact;
+        public InputAction @Interact2 => m_Wrapper.m_Default_Interact2;
         public InputAction @Run => m_Wrapper.m_Default_Run;
         public InputAction @IntoPlaceMode => m_Wrapper.m_Default_IntoPlaceMode;
+        public InputAction @RotateItem => m_Wrapper.m_Default_RotateItem;
+        public InputAction @Throw => m_Wrapper.m_Default_Throw;
+        public InputAction @Exit => m_Wrapper.m_Default_Exit;
+        public InputAction @Close => m_Wrapper.m_Default_Close;
         public InputActionMap Get() { return m_Wrapper.m_Default; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -278,12 +393,27 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @Interact2.started += instance.OnInteract2;
+            @Interact2.performed += instance.OnInteract2;
+            @Interact2.canceled += instance.OnInteract2;
             @Run.started += instance.OnRun;
             @Run.performed += instance.OnRun;
             @Run.canceled += instance.OnRun;
             @IntoPlaceMode.started += instance.OnIntoPlaceMode;
             @IntoPlaceMode.performed += instance.OnIntoPlaceMode;
             @IntoPlaceMode.canceled += instance.OnIntoPlaceMode;
+            @RotateItem.started += instance.OnRotateItem;
+            @RotateItem.performed += instance.OnRotateItem;
+            @RotateItem.canceled += instance.OnRotateItem;
+            @Throw.started += instance.OnThrow;
+            @Throw.performed += instance.OnThrow;
+            @Throw.canceled += instance.OnThrow;
+            @Exit.started += instance.OnExit;
+            @Exit.performed += instance.OnExit;
+            @Exit.canceled += instance.OnExit;
+            @Close.started += instance.OnClose;
+            @Close.performed += instance.OnClose;
+            @Close.canceled += instance.OnClose;
         }
 
         private void UnregisterCallbacks(IDefaultActions instance)
@@ -297,12 +427,27 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @Interact2.started -= instance.OnInteract2;
+            @Interact2.performed -= instance.OnInteract2;
+            @Interact2.canceled -= instance.OnInteract2;
             @Run.started -= instance.OnRun;
             @Run.performed -= instance.OnRun;
             @Run.canceled -= instance.OnRun;
             @IntoPlaceMode.started -= instance.OnIntoPlaceMode;
             @IntoPlaceMode.performed -= instance.OnIntoPlaceMode;
             @IntoPlaceMode.canceled -= instance.OnIntoPlaceMode;
+            @RotateItem.started -= instance.OnRotateItem;
+            @RotateItem.performed -= instance.OnRotateItem;
+            @RotateItem.canceled -= instance.OnRotateItem;
+            @Throw.started -= instance.OnThrow;
+            @Throw.performed -= instance.OnThrow;
+            @Throw.canceled -= instance.OnThrow;
+            @Exit.started -= instance.OnExit;
+            @Exit.performed -= instance.OnExit;
+            @Exit.canceled -= instance.OnExit;
+            @Close.started -= instance.OnClose;
+            @Close.performed -= instance.OnClose;
+            @Close.canceled -= instance.OnClose;
         }
 
         public void RemoveCallbacks(IDefaultActions instance)
@@ -325,7 +470,12 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnInteract2(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnIntoPlaceMode(InputAction.CallbackContext context);
+        void OnRotateItem(InputAction.CallbackContext context);
+        void OnThrow(InputAction.CallbackContext context);
+        void OnExit(InputAction.CallbackContext context);
+        void OnClose(InputAction.CallbackContext context);
     }
 }

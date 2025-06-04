@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <OutlineWidth>k__BackingField: 5
   <OutlineColor>k__BackingField: {r: 0, g: 1, b: 0, a: 1}
-  <OutlineMode>k__BackingField: 0
+  <OutlineMode>k__BackingField: 1

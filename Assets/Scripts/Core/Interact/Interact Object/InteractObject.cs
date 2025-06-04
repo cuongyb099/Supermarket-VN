@@ -1,42 +1,59 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Core.Interact
 {
     public abstract class InteractObject : MonoBehaviour
     {
-        public OutlineBase ObjectOutline { get; protected set; }
         [field: SerializeField] public bool CanInteract { get; protected set; }
-        private static bool _isLoadone;
+	    protected OutlineBase outline;
 
         protected virtual void Awake()
         {
-	        ObjectOutline = GetComponent<OutlineBase>();
+	        outline = GetComponent<OutlineBase>();
         }
 
-        public void Interact(Transform source)
+        public void Interact(Interactor source)
         {
 	        if(!CanInteract) return;
             
 	        OnInteract(source);
         }
 
-        protected abstract void OnInteract(Transform source);
-        
-        public void RefreshShader(Material material)
+        public virtual void Focus(Interactor source)
         {
-	        var tempShader = material.shader;
-	        material.shader = null;
-	        material.shader = tempShader;
+	        if (source.CurrentInteractMode != InteractMode.Idle)
+	        {
+		        this.CanInteract = false;
+			    ResetInteract().Forget();
+		        return;
+	        }
+			
+		    outline.EnableOutline();
         }
+
+        public virtual void UnFocus(Interactor source)
+        {
+	        outline.DisableOutline();
+        }
+        
+        protected abstract void OnInteract(Interactor source);
 
         public virtual void ResetToIdle()
         {
-	        
+	        SetActiveCollision(true);
         }
         
         public virtual void SetActiveCollision(bool value)
         {
             
+        }
+        
+        protected virtual async UniTaskVoid ResetInteract()
+        {
+	        await UniTask.Yield();
+	        this.CanInteract = true;
+	        this.outline.DisableOutline();
         }
     }
 }
