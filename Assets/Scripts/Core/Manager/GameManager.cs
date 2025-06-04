@@ -10,7 +10,7 @@ namespace Core.Manager
         {
             GetInstance();
             //Test
-            // Cursor.lockState = CursorLockMode.Locked;   
+            Cursor.lockState = CursorLockMode.Locked;   
         }
     }
 }

@@ -1,5 +1,4 @@
 using DG.Tweening;
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,23 +9,18 @@ namespace Core.Interact
         [SerializeField] protected List<Transform> lights;
         public bool IsTurnOn { get; protected set; }
         
-        protected override void Awake()
-        {
-            base.Awake();
-        }
-
         protected void Start()
         {
-            foreach (Transform light in lights)
+            foreach (Transform childLight in lights)
             {
-                light.gameObject.SetActive(IsTurnOn);
+                childLight.gameObject.SetActive(IsTurnOn);
             }
         }
 
-        protected override void OnInteract(Transform source)
+        protected override void OnInteract(Interactor source)
         {
             this.CanInteract = false;
-            this.ObjectOutline.DisableOutline();
+            this.outline.DisableOutline();
             TurnOnLight();
 
             DOVirtual.DelayedCall(0.1f, () =>
@@ -38,9 +32,9 @@ namespace Core.Interact
         private void TurnOnLight()
         {
             IsTurnOn = !IsTurnOn;
-            foreach(Transform light  in lights)
+            foreach(Transform childLight  in lights)
             {
-                light.gameObject.SetActive(IsTurnOn);
+                childLight.gameObject.SetActive(IsTurnOn);
             }
         }
     }

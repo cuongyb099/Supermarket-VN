@@ -129,24 +129,5 @@ namespace Core.Interact
             }
             StopCoroutine(coroutine);
         }
-        
-        public Transform StartPoint;
-        public Transform EndPoint;
-        public int DebugCount;
-        private void OnDrawGizmos()
-        {
-            if(!Application.isPlaying) return;
-        
-            Gizmos.color = Color.green;
-        
-            for (int i = 1; i < DebugCount; i++)
-            {
-                var start = Vector3.Lerp(StartPoint.position, EndPoint.position, (float) (i - 1) / DebugCount);
-                var end = Vector3.Lerp(StartPoint.position, EndPoint.position, (float) i / DebugCount);
-                start.y += this.trajectoryCurve.Curve.Evaluate((float) (i - 1) / DebugCount) * this.trajectoryCurve.MaxHeight;
-                end.y += this.trajectoryCurve.Curve.Evaluate((float) i / DebugCount) * this.trajectoryCurve.MaxHeight;
-                Gizmos.DrawLine(start, end);
-            }
-        }
     }
 }

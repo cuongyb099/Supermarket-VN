@@ -14,6 +14,12 @@ public class ShelfTier : InteractObject
     protected Grid3D grid;
     [SerializeField] protected TrajectoryCurveSO trajectoryCurve;
     
+    protected override void Awake()
+    {
+        this.outline = GetComponentInParent<OutlineBase>();
+        grid = GetComponent<Grid3D>();
+    }
+    
     protected override void OnInteract(Interactor source)
     {
         if(!trajectoryCurve) return;
@@ -73,13 +79,6 @@ public class ShelfTier : InteractObject
         });
     }
 
-    protected override void Awake()
-    {
-        this.outline = GetComponentInParent<OutlineBase>();
-        grid = GetComponent<Grid3D>();
-    }
-    
-       
     public override void Focus(Interactor source)
     {
         if (source.CurrentInteractMode != InteractMode.HoldingItem || source.CurrentObjectInHand is not Box)
@@ -88,14 +87,8 @@ public class ShelfTier : InteractObject
             ResetInteract().Forget();
             return;
         }
-        base.Focus(source); 
+        
+        outline.EnableOutline();
         ResetInteract().Forget();
-    }
-
-    protected async UniTaskVoid ResetInteract()
-    {
-        await UniTask.Yield();
-        this.CanInteract = true;
-        this.outline.DisableOutline();
     }
 }

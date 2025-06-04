@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Core.Interact
@@ -21,7 +22,14 @@ namespace Core.Interact
 
         public virtual void Focus(Interactor source)
         {
-	        outline.EnableOutline();
+	        if (source.CurrentInteractMode != InteractMode.Idle)
+	        {
+		        this.CanInteract = false;
+			    ResetInteract().Forget();
+		        return;
+	        }
+			
+		    outline.EnableOutline();
         }
 
         public virtual void UnFocus(Interactor source)
@@ -39,6 +47,13 @@ namespace Core.Interact
         public virtual void SetActiveCollision(bool value)
         {
             
+        }
+        
+        protected virtual async UniTaskVoid ResetInteract()
+        {
+	        await UniTask.Yield();
+	        this.CanInteract = true;
+	        this.outline.DisableOutline();
         }
     }
 }
