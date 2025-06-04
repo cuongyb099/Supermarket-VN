@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Core.Constant;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -37,13 +39,22 @@ namespace Core.Interact
             outlineMaskMaterial = null;
             outlineFillMaterial = null;
         }
-        
-        private void Awake() 
+
+        private void Reset()
         {
             renderers = GetComponentsInChildren<Renderer>();
+        }
+
+        private void Awake() 
+        {
             
 #if UNITY_EDITOR
-            GenerateSmoothNormalUV.Bake(GetComponentsInChildren<MeshFilter>().ToList());
+            List<MeshFilter> meshFilters = new List<MeshFilter>();
+            foreach (var render in renderers)
+            {
+                meshFilters.Add(render.GetComponent<MeshFilter>());
+            }
+            GenerateSmoothNormalUV.Bake(meshFilters);
 #endif
             
               if(_isLoadDone) return;

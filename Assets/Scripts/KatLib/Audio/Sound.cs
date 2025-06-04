@@ -1,6 +1,6 @@
 using KatLib.Logger;
-using KatLib.Pooling;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace KatAudio
 {
@@ -209,12 +209,12 @@ namespace KatAudio
             if (!SoundManager.IsExist)
             {
                 LogCommon.LogWarning("Sound Manager Not Exist");
-                GenericPool<Sound>.Return(this);
+                GenericPool<Sound>.Release(this);
                 return;
             }
             
             SoundManager.Instance.PlaySound(this);
-            GenericPool<Sound>.Return(this);
+            GenericPool<Sound>.Release(this);
         }
 
         /// <summary>

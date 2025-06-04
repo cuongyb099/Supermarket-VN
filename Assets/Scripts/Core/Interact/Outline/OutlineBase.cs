@@ -4,7 +4,7 @@ namespace Core.Interact
 {
     public abstract class OutlineBase : MonoBehaviour
     {
-        protected Renderer[] renderers;
+        [SerializeField] protected Renderer[] renderers;
         public abstract void EnableOutline();
         public abstract void DisableOutline();
         public bool IsEnable { get; protected set; }

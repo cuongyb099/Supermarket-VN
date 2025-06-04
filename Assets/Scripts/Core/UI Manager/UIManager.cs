@@ -1,34 +1,47 @@
 using System.Collections.Generic;
 using System;
-using KatLib.Logger;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 
 namespace Core.UIManager
 {
     [DefaultExecutionOrder(-100)]
+    [RequireComponent(typeof(CanvasGroup))]
     public class UIManager : MonoBehaviour
     {
-        private Dictionary<string, PanelToggle> _panelDictionary = new();
-        [SerializeField] private List<PanelToggle> _panelsHistory = new();
+        private Dictionary<string, PanelBase> _panel = new();
+        private CanvasGroup _canvasGroup;
+        [SerializeField] private List<PanelBase> _panelsHistory = new();
         
         private void Awake()
         {
+            _canvasGroup = GetComponent<CanvasGroup>();
             _panelsHistory.Clear();
             foreach (var panel in GetComponentsInChildren<PanelBase>())
             {
                 panel.Init(this);
-                
-                if (panel is not PanelToggle panelToggle) continue;
-                
-                _panelDictionary.Add(panel.name, panelToggle);
+
+                _panel.Add(panel.name, panel);
              
-                if (!panelToggle.IsVisible) continue;
+                if (!panel.IsVisible) continue;
                 
-                _panelsHistory.Add(panelToggle);
+                _panelsHistory.Add(panel);
             }
         }
 
+        public void SetUIActive(bool value)
+        {
+            if (value)
+            {
+                _canvasGroup.alpha = 1;
+                _canvasGroup.blocksRaycasts = true;
+                return;
+            }
+            
+            _canvasGroup.alpha = 0;
+            _canvasGroup.blocksRaycasts = false;
+        }
+        
         public void AddToHitory(PanelToggle panel)
         {
             if(_panelsHistory.Contains(panel)) return;
@@ -43,7 +56,7 @@ namespace Core.UIManager
         
         public async UniTask<PanelBase> CreatePanelAsync(string panelName, Transform parent = null, Action<PanelBase> onComplete = null)
         {
-            if (_panelDictionary.TryGetValue(panelName, out PanelToggle panel)) return panel;
+            if (_panel.TryGetValue(panelName, out PanelBase panel)) return panel;
 
             var go = await AddressablesManager.Instance.InstantiateAsync(panelName, parent? parent: transform, false);
             go.name = panelName;
@@ -52,34 +65,31 @@ namespace Core.UIManager
             {
                 return null;
             }
-            panelBase.Init(this);
-            if (panelBase is not PanelToggle panelToggle)
-            {
-                onComplete?.Invoke(panelBase);
-                return panelBase;
-            }
             
-            _panelDictionary.Add(panelName, panelToggle);
-            onComplete?.Invoke(panelToggle);
-            return panelToggle;
+            panelBase.Init(this);
+            
+            _panel.Add(panelName, panelBase);
+            onComplete?.Invoke(panelBase);
+            return panelBase;
         }
 
         public void RemovePanel(string panelName)
         {
-            if(!_panelDictionary.Remove(panelName, out var panel)) return;
+            if(!_panel.Remove(panelName, out var panel)) return;
+            
             _panelsHistory.Remove(panel);
             Destroy(panel.gameObject);
             AddressablesManager.Instance.ReleaseInstance(panelName);
         }
 
-        public T GetPanel<T>(string panelName) where T : PanelToggleByCanvas
+        public T GetPanel<T>(string panelName) where T : PanelBase
         {
-            return (T)_panelDictionary.GetValueOrDefault(panelName);
+            return (T)_panel.GetValueOrDefault(panelName);
         }
 
-        public T GetFirstPanelOfType<T>() where T : PanelToggleByCanvas
+        public T GetFirstPanelOfType<T>() where T : PanelBase
         {
-            foreach (var panel in _panelDictionary.Values)
+            foreach (var panel in _panel.Values)
             {
                 if (panel is T tPanel) return tPanel;
             }
@@ -89,8 +99,8 @@ namespace Core.UIManager
         
         public void ShowPanel(string panelName)
         {
-            if (!_panelDictionary.TryGetValue(panelName, out var panel) || _panelsHistory.Contains(panel)) return;
-            
+            if (!_panel.TryGetValue(panelName, out var panel)) return;
+         
             panel.Show();
         }
 
