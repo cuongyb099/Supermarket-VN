@@ -9,7 +9,7 @@ namespace Core.UIManager
     [RequireComponent(typeof(CanvasGroup))]
     public class UIManager : MonoBehaviour
     {
-        private Dictionary<string, PanelBase> _panel = new();
+        private Dictionary<string, PanelBase> _panels = new();
         private CanvasGroup _canvasGroup;
         [SerializeField] private List<PanelBase> _panelsHistory = new();
         
@@ -21,7 +21,7 @@ namespace Core.UIManager
             {
                 panel.Init(this);
 
-                _panel.Add(panel.name, panel);
+                _panels.Add(panel.name, panel);
              
                 if (!panel.IsVisible) continue;
                 
@@ -56,7 +56,7 @@ namespace Core.UIManager
         
         public async UniTask<PanelBase> CreatePanelAsync(string panelName, Transform parent = null, Action<PanelBase> onComplete = null)
         {
-            if (_panel.TryGetValue(panelName, out PanelBase panel)) return panel;
+            if (_panels.TryGetValue(panelName, out PanelBase panel)) return panel;
 
             var go = await AddressablesManager.Instance.InstantiateAsync(panelName, parent? parent: transform, false);
             go.name = panelName;
@@ -68,28 +68,37 @@ namespace Core.UIManager
             
             panelBase.Init(this);
             
-            _panel.Add(panelName, panelBase);
+            _panels.Add(panelName, panelBase);
             onComplete?.Invoke(panelBase);
             return panelBase;
         }
 
         public void RemovePanel(string panelName)
         {
-            if(!_panel.Remove(panelName, out var panel)) return;
+            if(!_panels.Remove(panelName, out var panel)) return;
             
             _panelsHistory.Remove(panel);
-            Destroy(panel.gameObject);
             AddressablesManager.Instance.ReleaseInstance(panelName);
         }
 
+        public void RemoveAllPanel()
+        {
+            foreach (var panel in _panels)
+            {
+                AddressablesManager.Instance.ReleaseInstance(panel.Key);
+            }
+            
+            _panelsHistory.Clear();
+        }
+        
         public T GetPanel<T>(string panelName) where T : PanelBase
         {
-            return (T)_panel.GetValueOrDefault(panelName);
+            return (T)_panels.GetValueOrDefault(panelName);
         }
 
         public T GetFirstPanelOfType<T>() where T : PanelBase
         {
-            foreach (var panel in _panel.Values)
+            foreach (var panel in _panels.Values)
             {
                 if (panel is T tPanel) return tPanel;
             }
@@ -99,7 +108,7 @@ namespace Core.UIManager
         
         public void ShowPanel(string panelName)
         {
-            if (!_panel.TryGetValue(panelName, out var panel)) return;
+            if (!_panels.TryGetValue(panelName, out var panel)) return;
          
             panel.Show();
         }

@@ -8,7 +8,7 @@ namespace Core.Scene
     public class MainMenu : SceneCtrlBase<MainMenu>
     {
         public Button btn;
-
+        public UIManager.UIManager uiManager;
         protected override void OnAwake()
         {
             btn.onClick.AddListener(() =>
@@ -23,6 +23,8 @@ namespace Core.Scene
                     await SceneManager.LoadSceneAsync(SceneConstant.Gameplay, LoadSceneMode.Additive);
                 });
             });
+            
+            
         }
     }
 }

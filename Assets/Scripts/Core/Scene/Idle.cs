@@ -1,5 +1,6 @@
 using Core.Constant;
 using Cysharp.Threading.Tasks;
+using Language;
 using UnityEngine.SceneManagement;
 
 namespace Core.Scene
@@ -13,6 +14,10 @@ namespace Core.Scene
             Loading.AddLoadingTask(async () =>
             {
                 Loading.Instance.ChangeLoadingDescription("UnLoad Idle");
+                
+                await UniTask.WaitUntil(() => LanguageManager.Instance);
+                SceneManager.MoveGameObjectToScene(LanguageManager.Instance.gameObject, gameObject.scene);
+                
                 await SceneManager.UnloadSceneAsync(SceneConstant.Idle);
             });
             Loading.AddLoadingTask(async () =>

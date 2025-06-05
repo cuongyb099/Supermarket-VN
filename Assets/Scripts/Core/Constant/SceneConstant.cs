@@ -2,11 +2,11 @@ namespace Core.Constant
 {
     public static class SceneConstant
     {
-        public static string Idle = "Idle";
-        public static string Loading = "Loading";
-        public static string Camera = "Camera";
-        public static string MainMenu = "Main Menu";
-        public static string Gameplay = "Gameplay";
-        public static string Environment = "Environment";
+        public static readonly string Idle = "Idle";
+        public static readonly string Loading = "Loading";
+        public static readonly string Camera = "Camera";
+        public static readonly string MainMenu = "Main Menu";
+        public static readonly string Gameplay = "Gameplay";
+        public static readonly string Environment = "Environment";
     }
 }
