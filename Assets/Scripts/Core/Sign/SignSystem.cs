@@ -10,7 +10,7 @@ namespace Core.Sign
         public bool StatusReverse;
         
         [SerializeField]
-        public bool statusOpened;
+        public bool StatusOpened;
         
         static public Action ContinueSpawnCallback;
         static public Action PauseSpawnCallback;
@@ -24,7 +24,7 @@ namespace Core.Sign
             PauseSpawnCallback += CallbackClose;
             
             StatusReverse = false;
-            statusOpened = true;
+            StatusOpened = false;
             
             _signRender = GetComponent<SignRender>();
         }
@@ -69,15 +69,15 @@ namespace Core.Sign
 
         public void StatusChange()
         {
-            if (statusOpened)
+            if (StatusOpened)
             {
                 OnClose();
-                statusOpened = false;
+                StatusOpened = false;
             }
             else
             {
                 OnOpen();
-                statusOpened = true;
+                StatusOpened = true;
             }
         }
         // private void Update()

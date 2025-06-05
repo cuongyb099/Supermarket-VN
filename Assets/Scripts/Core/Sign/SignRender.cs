@@ -30,7 +30,7 @@ namespace Core.Sign
         IEnumerator SetDefaultTexture()
         {
             yield return new WaitUntil(() => _loadTexture2DDone);
-            _material.mainTexture = _signOpenTexture;
+            _material.mainTexture = _signClosedTexture;
         }
 
         private async UniTaskVoid LoadTexture2D()
