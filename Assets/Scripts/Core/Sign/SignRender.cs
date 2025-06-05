@@ -33,6 +33,11 @@ namespace Core.Sign
             _material.mainTexture = _signClosedTexture;
         }
 
+        private void OnDestroy()
+        {
+            _material.mainTexture = _signClosedTexture;
+        }
+
         private async UniTaskVoid LoadTexture2D()
         {
             const string SignOpenStore = "sign_open_store";
