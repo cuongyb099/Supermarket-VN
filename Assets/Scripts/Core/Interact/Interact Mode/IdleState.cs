@@ -16,7 +16,6 @@ namespace Core.Interact.Interact_Mode
 			if (data.LeftInteract.WasPressedThisFrame() && data.CurrentTargetFristSlot)
 			{
 				data.CurrentTargetFristSlot.Interact(this.interactor);
-				stateMachine.ChangeState(InteractMode.HoldingItem);
 				return null;
 			}
 		

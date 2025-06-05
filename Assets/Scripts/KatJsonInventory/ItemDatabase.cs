@@ -23,10 +23,9 @@ namespace KatJsonInventory
 
         public async UniTask Init(CancellationToken token = default)
         {
-            const string AddressableLabel = "ItemDatabase";
+            const string AddressableLabel = "Items";
             var textAsset = await AddressablesManager.Instance.LoadAssetAsync<TextAsset>(AddressableLabel, token: token);
-
-            var datas = JsonConvert.DeserializeObject<List<ItemData>>(textAsset.text);;
+            var datas = JsonConvert.DeserializeObject<List<ItemData>>(textAsset.text);
             _itemDictionary = datas.ToDictionary(key => key.ID, value => value);
             ItemDictionary = new ReadOnlyDictionary<string, ItemData>(_itemDictionary);
             AddressablesManager.Instance.ReleaseInstance(AddressableLabel);

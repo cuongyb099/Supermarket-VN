@@ -8,6 +8,24 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Gameplay.unity
+    guid: 34fc239a27e3863429f6b0f24fbaae0e
+  - enabled: 1
+    path: Assets/Scenes/Loading.unity
+    guid: 0899a578d81526747907b89d6d260180
+  - enabled: 1
+    path: Assets/Scenes/Main Menu.unity
+    guid: f9ecc9e52b98ece429ac9e593430731f
+  - enabled: 1
+    path: Assets/Scenes/Environment.unity
+    guid: 9888caeb288b6cf4eb66eb2d5f81c577
+  - enabled: 1
+    path: Assets/Scenes/Idle.unity
+    guid: f325ce5dbdd550b49a3903f1f00b169b
+  - enabled: 1
+    path: Assets/Scenes/Camera.unity
+    guid: 348d898bfeb08b44ab13f18325b509d3
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 1f7ea21c64431ac419722561dedd5d82,
       type: 2}

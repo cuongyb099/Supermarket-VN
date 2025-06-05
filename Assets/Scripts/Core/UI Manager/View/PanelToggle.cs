@@ -2,16 +2,14 @@ namespace Core.UIManager
 {
     public abstract class PanelToggle : PanelBase, IHidable, IShowable
     {
-        public bool IsVisible { get; protected set; }
-
-        public void Hide()
+        public override void Hide()
         {
             IsVisible = false;
             uiManager.RemoveFromHistory(this);
             OnHide();
         }
 
-        public void Show()
+        public override void Show()
         {
             IsVisible = true;
             uiManager.AddToHitory(this);

@@ -27,6 +27,7 @@ namespace Core.Interact.Interact_Mode
             if (data.LeftInteract.WasPressedThisFrame() || data.RightInteract.WasPressedThisFrame())
             {
                 data.CurrentTargetSecondSlot?.Interact(this.interactor);
+                return null;
             }
             
             CheckInteractObject(ref data.CurrentTargetSecondSlot);

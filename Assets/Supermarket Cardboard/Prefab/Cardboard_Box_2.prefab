@@ -201,6 +201,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 4091162886149457466}
+  - {fileID: 5454205244991286912}
+  - {fileID: 3159832597326533819}
+  - {fileID: 2617566206407670756}
+  - {fileID: 3591434975031054541}
   config: {fileID: 11400000, guid: 7d555af241046754990e967322968c2b, type: 2}
 --- !u!114 &6586682014028231607
 MonoBehaviour:
