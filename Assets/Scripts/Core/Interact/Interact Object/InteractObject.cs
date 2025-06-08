@@ -1,3 +1,4 @@
+using Core.Manager;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -51,7 +52,7 @@ namespace Core.Interact
         
         protected virtual async UniTaskVoid ResetInteract()
         {
-	        await UniTask.Yield();
+	        await UniTask.Yield(GameManager.Instance.GetCancellationTokenOnDestroy());
 	        this.CanInteract = true;
 	        this.outline.DisableOutline();
         }

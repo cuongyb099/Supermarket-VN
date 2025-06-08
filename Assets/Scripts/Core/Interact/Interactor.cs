@@ -48,6 +48,7 @@ namespace Core.Interact
             }            
         }
 
+        public void SwitchInteractMode(InteractMode interactMode) => stateMachine.ChangeState(interactMode);
         public void AttachItemToHand(ObjectAttackToHand item) => holdingItem.AttachItemToHand(item);
         public InteractObject CurrentObjectInHand => interactData.CurrentTargetFristSlot;
         public InteractMode CurrentInteractMode => stateMachine.CurrentStateID;
