@@ -1,2 +1,18 @@
 {
+  "CONTINUE": {
+    "EN" : "Continues",
+    "VN" : "Chơi Tiếp"
+  },
+  "SETTINGS": {
+    "EN" : "Settings",
+    "VN" : "Cài Đặt"
+  },
+  "EXIT": {
+    "EN" : "Exit",
+    "VN" : "Thoát"
+  },
+  "TEST": {
+    "EN" : "Exit",
+    "VN" : "Thoát"
+  }
 }
