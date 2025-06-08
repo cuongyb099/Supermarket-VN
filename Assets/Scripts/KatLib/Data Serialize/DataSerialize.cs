@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -65,10 +64,10 @@ namespace KatLib.Data_Serialize
 #endif
         }
 
-        public static async Task SaveFileAsync()
+        public static async UniTask SaveFileAsync()
         {
             OnSave?.Invoke();
-            await Task.Run(() => _serializeModule.SaveFile(SavePath));
+            await UniTask.RunOnThreadPool(() => _serializeModule.SaveFile(SavePath));
 #if UNITY_EDITOR
             AssetDatabase.Refresh();
 #endif

@@ -27,6 +27,10 @@ namespace Core.Interact.Interact_Mode
             if (data.LeftInteract.WasPressedThisFrame() || data.RightInteract.WasPressedThisFrame())
             {
                 data.CurrentTargetSecondSlot?.Interact(this.interactor);
+            }
+            
+            if (stateMachine.CurrentStateID != InteractMode.HoldingItem)
+            {
                 return null;
             }
             
@@ -90,11 +94,13 @@ namespace Core.Interact.Interact_Mode
         public void ThrowObject()
         {
             var target = data.CurrentTargetFristSlot;
+            
+            if(!target.TryGetComponent(out IThrowable throwable)) return;
+            
             target.transform.SetParent(null);
             target.ResetToIdle();
-            var rb = target.GetComponent<Rigidbody>();
-            rb.AddForce(data.CamTransform.forward * data.ThrowForce, ForceMode.VelocityChange);
             data.ResetTargetSlot(ref data.CurrentTargetFristSlot);
+            throwable.Throw(data.CamTransform.forward, data.ThrowForce);
             stateMachine.ChangeState(InteractMode.Idle);
         }
     }

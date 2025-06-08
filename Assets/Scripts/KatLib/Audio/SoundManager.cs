@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using KatLib.Data_Serialize;
 using KatLib.Singleton;
@@ -64,7 +65,7 @@ namespace KatAudio
 			_sfxGroup = groups[2];
 		}
 
-		public async Task LoadSoundGroupAsync(string key)
+		public async UniTask LoadSoundGroupAsync(string key)
 		{
 			if(_soundGroup.ContainsKey(key)) return;
 			

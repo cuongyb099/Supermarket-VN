@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Core.Constant;
 using Core.Input;
 using Core.Utilities;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,12 +12,15 @@ namespace Core.Interact
     {
         [SerializeField] protected Grid3D Grid3D;
         [SerializeField] protected Animator anim;
+        [SerializeField] protected TrajectoryCurveSO trajectoryCurve;
+        
         public bool IsOpen { get; protected set; }
+        
         protected const float animTransition = 0.25f;
         protected Coroutine coroutine;
         protected List<Product> products = new List<Product>();
         protected List<Vector3> productsPosition = new List<Vector3>();
-        [SerializeField] protected TrajectoryCurveSO trajectoryCurve;
+        protected IIndicatable indicatable;
         
         protected override void Reset()
         {
@@ -28,24 +30,48 @@ namespace Core.Interact
             anim = GetComponentInChildren<Animator>();
         }
 
-        public void AddProduct(Product product)
+        protected override void Awake()
         {
-            //var firstItem = products[0];
-            //if(firstItem.GetItemData().ID != product.GetItemData().ID) return;
+            base.Awake();
+            ProductUtilities.CalculateProductPosition(prefab, Grid3D, ref productsPosition);
+            foreach (var position in productsPosition)
+            {
+                var clone = Instantiate(prefab, Grid3D.transform, true);
+                clone.transform.localPosition = position;
+                clone.transform.localRotation = Quaternion.identity;
+                products.Add(clone);
+            }
+
+            if(!TryGetComponent(out indicatable)) return;
+            indicatable.OnEnableIndicator += (color) =>
+            {
+                foreach (var product in products)
+                {
+                    product.GetIndicatable().EnableIndicator(color);
+                }
+            };
+            indicatable.OnDisableIndicator += () =>
+            {
+                foreach (var product in products)
+                {
+                    product.GetIndicatable().DisableIndicator();
+                }
+            };
+        }
+        
+        public bool AddProduct(Product product)
+        {
+            if (!IsOpen)
+            {
+                return false;
+            }
+            
             product.RenderOnTop.SetOnTop();
             products.Add(product);
             product.transform.SetParent(Grid3D.transform);
             int tempIndex = Mathf.Clamp(products.Count - 1, 0, products.Count - 1);
-            Transform productTransform = product.transform;
-            productTransform.DOKill();
-            Vector3 targetPosition = productsPosition[tempIndex];
-            DOVirtual.Float(0f, 1f, trajectoryCurve.Duration, (normalizedTime) =>
-            {
-                var tempPosition = Vector3.Lerp(productTransform.localPosition, targetPosition, normalizedTime);
-                tempPosition.y += trajectoryCurve.Curve.Evaluate(normalizedTime) * trajectoryCurve.MaxHeight;
-                productTransform.localPosition = tempPosition;
-                productTransform.localRotation = Quaternion.Lerp(productTransform.localRotation, Quaternion.identity, normalizedTime);
-            }).SetEase(trajectoryCurve.EaseMode);
+            product.transform.DoProductCurveAnim(trajectoryCurve, productsPosition[tempIndex]);
+            return true;
         }
 
         public bool RemoveProduct(out Product product)
@@ -60,19 +86,6 @@ namespace Core.Interact
             return true;
         }
 
-        protected override void Awake()
-        {
-            base.Awake();
-            ProductUtilities.CalculateProductPosition(prefab, Grid3D, ref productsPosition);
-            foreach (var position in productsPosition)
-            {
-                var clone = Instantiate(prefab, Grid3D.transform, true);
-                clone.transform.localPosition = position;
-                clone.transform.localRotation = Quaternion.identity;
-                products.Add(clone);
-            }
-        }
-
         public Product prefab;
 
         protected override void OnInteract(Interactor source)
@@ -85,12 +98,7 @@ namespace Core.Interact
             }
             
             rb.constraints = RigidbodyConstraints.None;
-            coroutine = StartCoroutine(CheckInput());
-
-            foreach (var product in products)
-            {
-                product.RenderOnTop.SetOnTop();
-            }
+            coroutine = StartCoroutine(CheckInput(source));
         }
 
         protected void OpenBox()
@@ -103,12 +111,18 @@ namespace Core.Interact
             anim.CrossFadeInFixedTime(AnimConstant.CloseBox, animTransition);
         }
 
-        private IEnumerator CheckInput()
+        private IEnumerator CheckInput(Interactor source)
         {
             InputAction close = InputManager.Instance.PlayerInputMap.Default.Close;
             
             while (true)
             {
+                if (source.CurrentInteractMode != InteractMode.HoldingItem)
+                {
+                    yield return null;
+                    continue;
+                }
+                
                 if (close.WasPressedThisFrame())
                 {
                     IsOpen = !IsOpen;
@@ -123,11 +137,34 @@ namespace Core.Interact
         public override void ResetToIdle()
         {
             base.ResetToIdle();
+            StopCoroutine(coroutine);
+        }
+
+        public override void SetOnTop()
+        {
+            if(isTopLayer) return;
+            
+            renderOnTop.SetOnTop();
+            foreach (var product in products)
+            {
+                product.RenderOnTop.SetOnTop();
+            }
+
+            isTopLayer = true;
+        }
+
+        public override void ToDefaultRender()
+        {
+            if(!isTopLayer) return;
+            
+            renderOnTop.ReturnDefault();
             foreach (var product in products)
             {
                 product.RenderOnTop.ReturnDefault();
             }
-            StopCoroutine(coroutine);
+            isTopLayer = false;
         }
+
+      
     }
 }

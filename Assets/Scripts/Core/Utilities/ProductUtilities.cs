@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Core.Utilities
@@ -83,6 +84,19 @@ namespace Core.Utilities
             }
             
             productsPosition.Add(grid.transform.InverseTransformPoint(productPosition));
+        }
+
+        public static void DoProductCurveAnim(this Transform productTransform, TrajectoryCurveSO trajectoryCurve, Vector3 targetPosition)
+        {
+            productTransform.DOKill();
+            DOVirtual.Float(0f, 1f, trajectoryCurve.Duration, (normalizedTime) =>
+            {
+                var tempPosition = Vector3.Lerp(productTransform.localPosition, targetPosition, normalizedTime);
+                tempPosition.y += trajectoryCurve.Curve.Evaluate(normalizedTime) * trajectoryCurve.MaxHeight;
+                productTransform.localPosition = tempPosition;
+                productTransform.localRotation = Quaternion.Lerp(productTransform.localRotation, Quaternion.identity, normalizedTime);
+            })
+            .SetEase(trajectoryCurve.EaseMode);
         }
     }
 }

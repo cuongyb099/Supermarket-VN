@@ -23,8 +23,6 @@ namespace Core.Scene
                     await SceneManager.LoadSceneAsync(SceneConstant.Gameplay, LoadSceneMode.Additive);
                 });
             });
-            
-            
         }
     }
 }

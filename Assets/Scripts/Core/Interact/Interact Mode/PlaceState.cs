@@ -15,15 +15,21 @@ namespace Core.Interact.Interact_Mode
         protected bool canPlace;
         protected IIndicatable currentIndicatable;
         protected IPlacable currentPlace => (IPlacable)data.CurrentTargetFristSlot;
+        protected IRenderOnTopHandle CurrentRenderOnTopHandle => (IRenderOnTopHandle)data.CurrentTargetFristSlot;
         
         public PlaceState(InteractData data, Interactor interactor, StateMachine<InteractMode, InteractState> stateMachine) 
             : base(data, interactor, stateMachine)
         {
         }
 
+        public override void Enter()
+        {
+            base.Enter();
+            data.CurrentTargetFristSlot.TryGetComponent(out currentIndicatable);
+        }
+
         public override YieldInstruction OnUpdate()
         {
-            currentIndicatable ??= data.CurrentTargetFristSlot.GetComponent<IIndicatable>();
             
             float RayDistance = this.data.RayDistance;
             RaycastHit[] hits = this.data.RayHits;
@@ -89,9 +95,11 @@ namespace Core.Interact.Interact_Mode
                 targetTransform.position = Vector3.Lerp(targetTransform.position, targetPos, smoothSpeed * Time.deltaTime);
                 targetTransform.rotation = Quaternion.Lerp(targetTransform.rotation, targetRot, smoothSpeed * Time.deltaTime);
                 targetTransform.SetParent(currentHand);
+                CurrentRenderOnTopHandle.SetOnTop();
                 return null;
             }
 
+            CurrentRenderOnTopHandle?.ToDefaultRender();
             Vector3 lookDir = Vector3.ProjectOnPlane(-cameraTransform.forward, Vector3.up);
             targetRot = Quaternion.LookRotation(lookDir, Vector3.up);
             targetRot *= Quaternion.Euler(0f, currentRotateAngle, 0f);

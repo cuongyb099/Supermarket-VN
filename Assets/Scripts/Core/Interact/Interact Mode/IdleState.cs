@@ -16,9 +16,13 @@ namespace Core.Interact.Interact_Mode
 			if (data.LeftInteract.WasPressedThisFrame() && data.CurrentTargetFristSlot)
 			{
 				data.CurrentTargetFristSlot.Interact(this.interactor);
+			}
+
+			if (stateMachine.CurrentStateID != InteractMode.Idle)
+			{
 				return null;
 			}
-		
+			
 			return CheckInteractObject(ref data.CurrentTargetFristSlot);
 		}
 

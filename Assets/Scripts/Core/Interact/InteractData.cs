@@ -14,7 +14,7 @@ namespace Core.Interact
         
         public Transform CamTransform => CameraManager.Instance.MainCamera.transform;
         
-        [NonSerialized]public Transform CurrentHandTransform;
+        [NonSerialized] public Transform CurrentHandTransform;
         [NonSerialized] public RaycastHit[] RayHits = new RaycastHit[10];
         [NonSerialized] public Collider[] OverlapHits = new Collider[10];
         
