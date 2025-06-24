@@ -1264,11 +1264,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 856007381692285792}
-    - target: {fileID: 356635901949657243, guid: 4eecfaa008a9b9045b5ab26e11ce918e,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Activate
-      objectReference: {fileID: 0}
     - target: {fileID: 2772177217564688200, guid: 4eecfaa008a9b9045b5ab26e11ce918e,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -1399,46 +1394,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Settings
       objectReference: {fileID: 0}
-    - target: {fileID: 3708947710417596478, guid: 4eecfaa008a9b9045b5ab26e11ce918e,
-        type: 3}
-      propertyPath: m_Alpha
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4527338730536816359, guid: 4eecfaa008a9b9045b5ab26e11ce918e,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4527338730536816359, guid: 4eecfaa008a9b9045b5ab26e11ce918e,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4527338730536816359, guid: 4eecfaa008a9b9045b5ab26e11ce918e,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1496911432}
-    - target: {fileID: 4527338730536816359, guid: 4eecfaa008a9b9045b5ab26e11ce918e,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4527338730536816359, guid: 4eecfaa008a9b9045b5ab26e11ce918e,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Activate
-      objectReference: {fileID: 0}
-    - target: {fileID: 4527338730536816359, guid: 4eecfaa008a9b9045b5ab26e11ce918e,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ToggleCanvasGroup, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 4527338730536816359, guid: 4eecfaa008a9b9045b5ab26e11ce918e,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 4783921876381842500, guid: 4eecfaa008a9b9045b5ab26e11ce918e,
         type: 3}
       propertyPath: m_AnchorMax.x

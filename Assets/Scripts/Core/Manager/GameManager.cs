@@ -1,3 +1,5 @@
+using System;
+using KatLib.Data_Serialize;
 using KatLib.Singleton;
 using UnityEngine;
 
@@ -11,6 +13,11 @@ namespace Core.Manager
             GetInstance();
             //Test
             //Cursor.lockState = CursorLockMode.Locked;   
+        }
+
+        private void OnApplicationQuit()
+        {
+            DataSerialize.SaveFile();
         }
     }
 }
